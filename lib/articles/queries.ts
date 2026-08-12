@@ -14,3 +14,16 @@ export async function getPublishedArticles() {
     },
   });
 }
+
+export async function getPublishedArticleBySlug(slug: string) {
+  return prisma.article.findFirst({
+    where: {
+      slug,
+      status: "PUBLISHED",
+    },
+    include: {
+      author: true,
+      tags: true,
+    },
+  });
+}
