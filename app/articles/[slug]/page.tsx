@@ -1,9 +1,15 @@
+import "../article.css"
+
 import { calculateReadTime } from "@/lib/articles/utils";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPublishedArticleBySlug } from "@/lib/articles/queries";
-import Image from "next/image";
+import { getPublishedArticleBySlug, isFollowingUser, } from "@/lib/articles/queries";
+import { getSessionUserId } from "@/lib/auth/session";
 import MarkdownContent from "@/components/articles/MarkdownContent";
+
+import Comments from "@/components/Comments/Comment";
+import ClapButton from "@/components/ClapButton/ClapButton";
+import FollowButton from "@/components/FollowButton/FollowButton";
 
 type ArticlePageProps = {
   params: Promise<{
@@ -57,7 +63,20 @@ export default async function ArticlePage({
   if (!article) {
     notFound();
   }
-  const readTime = calculateReadTime(article.content);
+
+  const userId = await getSessionUserId();
+
+  const existingFollow = userId
+  ? await isFollowingUser(userId, article.authorId)
+  : null;
+
+  const isFollowing = !!existingFollow;
+
+
+  const hasClapped = userId
+    ? article.claps.some((clap) => clap.userId === userId)
+    : false;
+    const readTime = calculateReadTime(article.content);
 
   return (
     <main className="article-page">
@@ -73,7 +92,16 @@ export default async function ArticlePage({
             )}
 
             <div>
-              <p>{article.author.name}</p>
+              <div className="article-author-info">
+                <p>{article.author.name}</p>
+
+                {userId !== article.authorId && (
+                  <FollowButton
+                    userId={article.authorId}
+                    initialFollowing={isFollowing}
+                  />
+                )}
+            </div>
 
               {article.publishedAt && (
                 <time>
@@ -91,6 +119,11 @@ export default async function ArticlePage({
                     <span>·</span>
 
                     <span>{readTime} min read</span>
+                    <ClapButton
+                      articleId={article.id}
+                      initialCount={article.claps.length}
+                      initialClapped={hasClapped}
+                    />
                     </div>
                 </time>
               )}
@@ -123,6 +156,11 @@ export default async function ArticlePage({
         <div className="article-body">
             <MarkdownContent content={article.content} />
         </div>
+
+        <Comments
+          articleId={article.id}
+          initialComments={article.comments}
+        />
       </article>
     </main>
   );

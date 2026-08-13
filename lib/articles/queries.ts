@@ -24,6 +24,29 @@ export async function getPublishedArticleBySlug(slug: string) {
     include: {
       author: true,
       tags: true,
+      claps: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+}
+
+export async function isFollowingUser(
+  followerId: string,
+  followingId: string
+) {
+  return prisma.follow.findUnique({
+    where: {
+      followerId_followingId: {
+        followerId,
+        followingId,
+      },
     },
   });
 }

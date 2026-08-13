@@ -108,6 +108,16 @@
   font-family: monospace;
 }
 
+.article-author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.article-author-info p {
+  margin: 0;
+}
+
 @media (max-width: 700px) {
   .article-header h1 {
     font-size: 36px;

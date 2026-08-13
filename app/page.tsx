@@ -13,7 +13,7 @@ export default async function Home() {
         <hr/>
 
         <div className="article-list">
-          {articles.map((article) => (
+          {articles.slice(0,10).map((article) => (
             <ArticleCard
               key={article.id}
               article={article}

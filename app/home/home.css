@@ -7,18 +7,17 @@
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
-  padding: 120px 40px 60px;
+  padding: 80px 40px 60px;
 }
 
 .feed-header {
-  
   padding-bottom: 20px;
   margin-bottom: 10px;
 }
 
 .feed-header h1 {
-  font-size: 28px;
-  font-weight: 600;
+  font-family: Georgia, serif;
+  font-size: 36px;
   color: #242424;
 }
 

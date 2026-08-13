@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
+import Link from "next/link";
 
 import "./dashboard.css";
 
@@ -44,9 +45,9 @@ export default async function DashboardPage() {
             <h1>My Articles</h1>
           </div>
 
-          <a href="/write" className="new-article-button">
+          <Link href="/write" className="new-article-button">
             + New Article
-          </a>
+          </Link>
         </header>
         <hr/>
 

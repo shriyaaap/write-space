@@ -1,11 +1,10 @@
 import Navbar from "@/components/layout/Navbar";
-import "./globals.css";
-import "./home/home.css";
-import "./article/article.css";
-import "./auth/auth.css";
-import "./dashboard/dashboard.css";
 import Sidebar from "@/components/layout/Sidebar";
 
+import "./globals.css";
+import "./home/home.css";
+import "./auth/auth.css";
+import "./dashboard/dashboard.css";
 
 export default function RootLayout({
   children,
