@@ -1,31 +1,41 @@
 import Link from "next/link";
+import styles from "./Navbar.module.css";
+import { getSessionUserId } from "@/lib/auth/session";
+import { logout } from "@/app/actions/auth";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const userId = await getSessionUserId();
   return (
-    <header className="navbar">
-      <div className="navbar-left">
-        <button className="menu-button" aria-label="Open menu">
+    <header className={styles.navbar}>
+      <div className={styles.navbarLeft}>
+        <button className={styles.menuButton} aria-label="Open menu">
           ☰
         </button>
 
-        <Link href="/" className="logo">
+        <Link href="/" className={styles.logo}>
           WriteSpace
         </Link>
       </div>
 
-      <div className="navbar-right">
-        <Link href="/search" className="search-link">
-          <span>Search</span>
-        </Link>
+      <div className={styles.navbarRight}>
 
-        <Link href="/login" className="nav-link">
-          Log in
-        </Link>
-
-        <Link href="/signup" className="write-button">
-          Write
-        </Link>
-      </div>
+      {userId ? (
+        <>
+          <form action={logout}>
+            <button
+              type="submit"
+              className={styles.logoutButton}
+            >
+              Logout
+            </button>
+          </form>
+        </>
+      ) : (
+        <>
+          <Link href="/login">Log in</Link>
+        </>
+      )}
+    </div>
     </header>
   );
 }

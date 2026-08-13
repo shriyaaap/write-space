@@ -10,6 +10,7 @@ export default async function Home() {
         <div className="feed-header">
           <h1>Latest articles</h1>
         </div>
+        <hr/>
 
         <div className="article-list">
           {articles.map((article) => (
