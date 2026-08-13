@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import { getSessionUserId } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
-import { updateDraft } from "@/app/actions/articles";
+import { updateDraft, publishArticle, scheduleArticle } from "@/app/actions/articles";
 import styles from "../write.module.css";
 
 type EditPageProps = {
@@ -82,7 +82,36 @@ export default async function EditArticlePage({
             >
               Save Changes
             </button>
+
+            <button
+              type="submit"
+              className={styles.saveDraftButton}
+              formAction={publishArticle}
+            >
+              Publish
+            </button>
           </div>
+
+          <div className={styles.scheduleSection}>
+            <label htmlFor="scheduledAt">
+              Schedule for 
+            </label>
+
+            <input
+              id="scheduledAt"
+              type="datetime-local"
+              name="scheduledAt"
+              className={styles.scheduleInput}
+            />
+
+            <button
+              type="submit"
+              formAction={scheduleArticle}
+              className={styles.scheduleButton}
+            >
+              Schedule
+            </button>
+        </div>
         </form>
       </div>
     </main>

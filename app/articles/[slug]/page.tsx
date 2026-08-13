@@ -11,6 +11,7 @@ import Comments from "@/components/Comments/Comment";
 import ClapButton from "@/components/ClapButton/ClapButton";
 import FollowButton from "@/components/FollowButton/FollowButton";
 
+
 type ArticlePageProps = {
   params: Promise<{
     slug: string;
@@ -158,9 +159,11 @@ export default async function ArticlePage({
         </div>
 
         <Comments
-          articleId={article.id}
-          initialComments={article.comments}
-        />
+  articleId={article.id}
+  initialComments={article.comments}
+  articleAuthorId={article.author.id}
+  currentUserId={userId}
+/>
       </article>
     </main>
   );

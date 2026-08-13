@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
+import { deleteArticle } from "@/app/actions/articles";
 import Link from "next/link";
 
 import "./dashboard.css";
@@ -75,9 +76,23 @@ export default async function DashboardPage() {
                     </p>
                   </div>
 
-                  <a href={`/write/${article.id}`}>
-                    Edit
-                  </a>
+                  <div className="dashboard-actions">
+                    <a href={`/write/${article.id}`}>
+                      Edit
+                    </a>
+                  <form action={deleteArticle}>
+                    <input
+                      type="hidden"
+                      name="articleId"
+                      value={article.id}
+                    />
+
+                    <button type="submit">
+                      Delete
+                    </button>
+                </form>
+                  </div>
+                  
                 </article>
               ))}
             </div>
@@ -110,10 +125,23 @@ export default async function DashboardPage() {
                         : "Unknown date"}
                     </p>
                   </div>
+                  <div className="dashboard-actions">
+                      <a href={`/write/${article.id}`}>
+                        Edit
+                      </a>
+                      <form action={deleteArticle}>
+                        <input
+                          type="hidden"
+                          name="articleId"
+                          value={article.id}
+                        />
 
-                  <a href={`/write/${article.id}`}>
-                    Edit
-                  </a>
+                        <button type="submit">
+                          Delete
+                        </button>
+                    </form>
+                  </div>
+                  
                 </article>
               ))}
             </div>
@@ -155,9 +183,23 @@ export default async function DashboardPage() {
                     </div>
                   </div>
 
-                  <a href={`/articles/${article.slug}`}>
-                    View
-                  </a>
+                  <div className="dashboard-actions">
+                    <a href={`/articles/${article.slug}`}>
+                      View
+                    </a>
+
+                    <form action={deleteArticle}>
+                      <input
+                        type="hidden"
+                        name="articleId"
+                        value={article.id}
+                      />
+
+                      <button type="submit">
+                        Delete
+                      </button>
+                    </form>
+                </div>
                 </article>
               ))}
             </div>

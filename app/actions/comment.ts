@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
 
 export async function createComment(
   articleId: string,
@@ -46,5 +47,46 @@ export async function createComment(
   return {
     success: true,
     comment,
+  };
+}
+
+export async function deleteComment(commentId: string) {
+  const userId = await getSessionUserId();
+
+  if (!userId) {
+    redirect("/login");
+  }
+
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    include: {
+      article: true,
+    },
+  });
+
+  if (!comment) {
+    return {
+      success: false,
+      error: "Comment not found.",
+    };
+  }
+
+  if (comment.article.authorId !== userId) {
+    return {
+      success: false,
+      error: "You are not allowed to delete this comment.",
+    };
+  }
+
+  await prisma.comment.delete({
+    where: {
+      id: commentId,
+    },
+  });
+
+  return {
+    success: true,
   };
 }

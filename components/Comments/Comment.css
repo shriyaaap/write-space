@@ -91,3 +91,17 @@
   color: #6b6b6b;
   font-size: 13px;
 }
+
+.delete-comment-button {
+  margin-top: 8px;
+  border: none;
+  background: transparent;
+  color: #c62828;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.delete-comment-button:hover {
+  text-decoration: underline;
+}

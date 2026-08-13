@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createComment } from "@/app/actions/comment";
+import { createComment, deleteComment } from "@/app/actions/comment";
 import "./Comment.css"
 
 type Comment = {
@@ -19,11 +19,15 @@ type Comment = {
 type CommentsProps = {
   articleId: string;
   initialComments: Comment[];
+  articleAuthorId: string;
+  currentUserId: string | null;
 };
 
 export default function Comments({
   articleId,
   initialComments,
+  articleAuthorId,
+  currentUserId,
 }: CommentsProps) {
   const [comments, setComments] = useState(initialComments);
   const [content, setContent] = useState("");
@@ -53,6 +57,26 @@ export default function Comments({
 
     setLoading(false);
   }
+
+  async function handleDelete(commentId: string) {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this comment?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const result = await deleteComment(commentId);
+
+  if (result.success) {
+    setComments((current) =>
+      current.filter((comment) => comment.id !== commentId)
+    );
+  } else {
+    setError(result.error ?? "Unable to delete comment.");
+  }
+}
 
   return (
     <section className="comments-section">
@@ -97,15 +121,25 @@ export default function Comments({
               <p>{comment.content}</p>
 
               <time>
-                {new Date(comment.createdAt).toLocaleDateString(
-                  "en-US",
-                  {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  }
-                )}
-              </time>
+  {new Date(comment.createdAt).toLocaleDateString(
+    "en-US",
+    {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }
+  )}
+</time>
+
+{currentUserId === articleAuthorId && (
+  <button
+    type="button"
+    onClick={() => handleDelete(comment.id)}
+    className="delete-comment-button"
+  >
+    Delete
+  </button>
+)}
             </article>
           ))
         )}

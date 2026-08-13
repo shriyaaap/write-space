@@ -91,3 +91,25 @@ export async function searchPublishedArticles(query: string) {
     },
   });
 }
+
+export async function getFollowingArticles(userId: string) {
+  return prisma.article.findMany({
+    where: {
+      status: "PUBLISHED",
+      author: {
+        followers: {
+          some: {
+            followerId: userId,
+          },
+        },
+      },
+    },
+    orderBy: {
+      publishedAt: "desc",
+    },
+    include: {
+      author: true,
+      tags: true,
+    },
+  });
+}

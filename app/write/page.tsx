@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionUserId } from "@/lib/auth/session";
-import { createDraft } from "@/app/actions/articles";
+import { createDraft, publishArticle, scheduleArticle } from "@/app/actions/articles";
 import styles from "./write.module.css";
 
 export default async function WritePage() {
@@ -51,7 +51,36 @@ export default async function WritePage() {
             >
               Save Draft
             </button>
+
+            <button
+              type="submit"
+              className={styles.saveDraftButton}
+              formAction={publishArticle}
+            >
+              Publish
+            </button>
           </div>
+
+          <div className={styles.scheduleSection}>
+            <label htmlFor="scheduledAt">
+              Schedule for 
+            </label>
+
+            <input
+              id="scheduledAt"
+              type="datetime-local"
+              name="scheduledAt"
+              className={styles.scheduleInput}
+            />
+
+            <button
+              type="submit"
+              formAction={scheduleArticle}
+              className={styles.scheduleButton}
+            >
+              Schedule
+            </button>
+        </div>
         </form>
 
       </div>

@@ -142,3 +142,61 @@
     font-size: 17px;
   }
 }
+
+.writeActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.publishButton {
+  padding: 10px 20px;
+  margin: 20px;
+  border: none;
+  border-radius: 20px;
+  background: #242424;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.publishButton:hover {
+  background: #444;
+}
+
+.scheduleSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.scheduleSection label {
+  font-size: 14px;
+  color: #555;
+}
+
+.scheduleInput {
+  padding: 9px 10px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.scheduleButton {
+  padding: 9px 16px;
+  border: 1px solid #242424;
+  border-radius: 20px;
+  background: white;
+  color: #242424;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.scheduleButton:hover {
+  background: #242424;
+  color: white;
+}
