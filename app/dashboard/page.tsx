@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
 import { deleteArticle } from "@/app/actions/articles";
+import { publishScheduledArticles } from "@/app/actions/articles";
 import Link from "next/link";
 
 import "./dashboard.css";
@@ -13,6 +14,8 @@ export default async function DashboardPage() {
   if (!userId) {
     redirect("/login");
   }
+
+  await publishScheduledArticles();
 
   // Get only this user's articles
   const articles = await prisma.article.findMany({

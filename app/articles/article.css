@@ -118,6 +118,25 @@
   margin: 0;
 }
 
+.article-author a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.article-author a:hover {
+  text-decoration: underline;
+}
+
+.article-tags a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-tags a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 700px) {
   .article-header h1 {
     font-size: 36px;

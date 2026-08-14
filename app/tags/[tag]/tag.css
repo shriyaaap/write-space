@@ -1,0 +1,43 @@
+.tag-page {
+  min-height: 100vh;
+  background: #fff;
+  padding: 120px 20px 80px;
+}
+
+.tag-container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.tag-header {
+  padding-bottom: 30px;
+}
+
+.tag-label {
+  margin: 0 0 8px;
+  color: #6b6b6b;
+  font-size: 14px;
+}
+
+.tag-header h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  color: #242424;
+}
+
+.tag-header p:last-child {
+  margin-top: 10px;
+  color: #6b6b6b;
+}
+
+.tag-container hr {
+  border: 0;
+  border-top: 1px solid #e6e6e6;
+  margin-bottom: 32px;
+}
+
+.tag-empty {
+  color: #6b6b6b;
+  margin-top: 30px;
+}

@@ -1,6 +1,9 @@
 import { prisma } from "../db/prisma";
 
-export async function getPublishedArticles() {
+export async function getPublishedArticles(
+  page = 1,
+  pageSize = 10
+) {
   return prisma.article.findMany({
     where: {
       status: "PUBLISHED",
@@ -8,6 +11,8 @@ export async function getPublishedArticles() {
     orderBy: {
       publishedAt: "desc",
     },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
     include: {
       author: true,
       tags: true,
@@ -101,6 +106,48 @@ export async function getFollowingArticles(userId: string) {
           some: {
             followerId: userId,
           },
+        },
+      },
+    },
+    orderBy: {
+      publishedAt: "desc",
+    },
+    include: {
+      author: true,
+      tags: true,
+    },
+  });
+}
+
+export async function getAuthorByUsername(username: string) {
+  return prisma.user.findUnique({
+    where: {
+      username,
+    },
+    include: {
+      articles: {
+        where: {
+          status: "PUBLISHED",
+        },
+        orderBy: {
+          publishedAt: "desc",
+        },
+        include: {
+          author: true,
+          tags: true,
+        },
+      },
+    },
+  });
+}
+
+export async function getArticlesByTag(tag: string) {
+  return prisma.article.findMany({
+    where: {
+      status: "PUBLISHED",
+      tags: {
+        some: {
+          name: tag,
         },
       },
     },

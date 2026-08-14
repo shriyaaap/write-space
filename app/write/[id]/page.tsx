@@ -25,7 +25,9 @@ export default async function EditArticlePage({
     where: {
       id,
       authorId: userId,
-      status: "DRAFT",
+      status: {
+      in: ["DRAFT", "SCHEDULED"],
+    },
     },
   });
 

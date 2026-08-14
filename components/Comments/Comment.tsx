@@ -48,10 +48,12 @@ export default function Comments({
 
     const result = await createComment(articleId, content);
 
-    if (result.success) {
+    if (result.success && result.comment) {
       setComments((current) => [result.comment, ...current]);
       setContent("");
-    } else {
+    } else if (!result.success) {
+      setError(result.error ?? "Unable to add comment.");
+    }else {
       setError(result.error ?? "Unable to add comment.");
     }
 

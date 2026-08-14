@@ -2,6 +2,7 @@ import "../article.css"
 
 import { calculateReadTime } from "@/lib/articles/utils";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublishedArticleBySlug, isFollowingUser, } from "@/lib/articles/queries";
 import { getSessionUserId } from "@/lib/auth/session";
@@ -94,7 +95,9 @@ export default async function ArticlePage({
 
             <div>
               <div className="article-author-info">
-                <p>{article.author.name}</p>
+                <Link href={`/${article.author.username}`}>
+                  {article.author.name}
+                </Link>
 
                 {userId !== article.authorId && (
                   <FollowButton
@@ -141,9 +144,14 @@ export default async function ArticlePage({
 
           <div className="article-tags">
             {article.tags.map((tag) => (
-              <span key={tag.id}>#{tag.name}</span>
+              <Link
+                key={tag.id}
+                href={`/tags/${encodeURIComponent(tag.name)}`}
+              >
+                #{tag.name}
+              </Link>
             ))}
-          </div>
+        </div>
         </header>
 
         {article.coverImage && (
