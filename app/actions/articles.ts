@@ -234,3 +234,16 @@ export async function deleteArticle(formData: FormData) {
 
   redirect("/dashboard");
 }
+
+export async function recordArticleView(articleId: string) {
+  await prisma.article.update({
+    where: {
+      id: articleId,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+  });
+}

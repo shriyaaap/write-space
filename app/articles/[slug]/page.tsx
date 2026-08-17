@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import "../article.css"
 
 import { calculateReadTime } from "@/lib/articles/utils";
@@ -7,6 +8,7 @@ import { notFound } from "next/navigation";
 import { getPublishedArticleBySlug, isFollowingUser, } from "@/lib/articles/queries";
 import { getSessionUserId } from "@/lib/auth/session";
 import MarkdownContent from "@/components/articles/MarkdownContent";
+import ArticleView from "@/components/articles/ArticleView";
 
 import Comments from "@/components/Comments/Comment";
 import ClapButton from "@/components/ClapButton/ClapButton";
@@ -66,6 +68,7 @@ export default async function ArticlePage({
     notFound();
   }
 
+
   const userId = await getSessionUserId();
 
   const existingFollow = userId
@@ -78,7 +81,8 @@ export default async function ArticlePage({
   const hasClapped = userId
     ? article.claps.some((clap) => clap.userId === userId)
     : false;
-    const readTime = calculateReadTime(article.content);
+  const readTime = calculateReadTime(article.content);
+  <ArticleView articleId={article.id} />
 
   return (
     <main className="article-page">
@@ -123,6 +127,7 @@ export default async function ArticlePage({
                     <span>·</span>
 
                     <span>{readTime} min read</span>
+                    <span>{article.views} views</span>
                     <ClapButton
                       articleId={article.id}
                       initialCount={article.claps.length}
@@ -167,11 +172,11 @@ export default async function ArticlePage({
         </div>
 
         <Comments
-  articleId={article.id}
-  initialComments={article.comments}
-  articleAuthorId={article.author.id}
-  currentUserId={userId}
-/>
+          articleId={article.id}
+          initialComments={article.comments}
+          articleAuthorId={article.author.id}
+          currentUserId={userId}
+        />
       </article>
     </main>
   );

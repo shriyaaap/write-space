@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -123,25 +124,25 @@ export default function Comments({
               <p>{comment.content}</p>
 
               <time>
-  {new Date(comment.createdAt).toLocaleDateString(
-    "en-US",
-    {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    }
-  )}
-</time>
+                {new Date(comment.createdAt).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  }
+                )}
+              </time>
 
-{currentUserId === articleAuthorId && (
-  <button
-    type="button"
-    onClick={() => handleDelete(comment.id)}
-    className="delete-comment-button"
-  >
-    Delete
-  </button>
-)}
+              {currentUserId === articleAuthorId && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(comment.id)}
+                  className="delete-comment-button"
+                >
+                  Delete
+                </button>
+              )}
             </article>
           ))
         )}

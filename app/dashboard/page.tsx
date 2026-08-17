@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
-import { deleteArticle } from "@/app/actions/articles";
 import { publishScheduledArticles } from "@/app/actions/articles";
 import Link from "next/link";
+import DeleteArticleButton from "@/components/DeleteArticleButton/DeleteArticleButton";
 
 import "./dashboard.css";
 
@@ -83,17 +83,7 @@ export default async function DashboardPage() {
                     <a href={`/write/${article.id}`}>
                       Edit
                     </a>
-                  <form action={deleteArticle}>
-                    <input
-                      type="hidden"
-                      name="articleId"
-                      value={article.id}
-                    />
-
-                    <button type="submit">
-                      Delete
-                    </button>
-                </form>
+                  <DeleteArticleButton articleId={article.id} />
                   </div>
                   
                 </article>
@@ -132,17 +122,7 @@ export default async function DashboardPage() {
                       <a href={`/write/${article.id}`}>
                         Edit
                       </a>
-                      <form action={deleteArticle}>
-                        <input
-                          type="hidden"
-                          name="articleId"
-                          value={article.id}
-                        />
-
-                        <button type="submit">
-                          Delete
-                        </button>
-                    </form>
+                      <DeleteArticleButton articleId={article.id} />
                   </div>
                   
                 </article>
@@ -191,17 +171,7 @@ export default async function DashboardPage() {
                       View
                     </a>
 
-                    <form action={deleteArticle}>
-                      <input
-                        type="hidden"
-                        name="articleId"
-                        value={article.id}
-                      />
-
-                      <button type="submit">
-                        Delete
-                      </button>
-                    </form>
+                    <DeleteArticleButton articleId={article.id} />
                 </div>
                 </article>
               ))}
