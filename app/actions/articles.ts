@@ -236,7 +236,9 @@ export async function deleteArticle(formData: FormData) {
 }
 
 export async function recordArticleView(articleId: string) {
-  await prisma.article.update({
+  console.log("Recording view for:", articleId);
+
+  const article = await prisma.article.update({
     where: {
       id: articleId,
     },
@@ -246,4 +248,8 @@ export async function recordArticleView(articleId: string) {
       },
     },
   });
+
+  console.log("New view count:", article.views);
+
+  return article.views;
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { recordArticleView } from "@/app/actions/articles";
 
 type ArticleViewProps = {
@@ -11,16 +10,17 @@ type ArticleViewProps = {
 export default function ArticleView({
   articleId,
 }: ArticleViewProps) {
-  const router = useRouter();
+  const hasRecordedView = useRef(false);
 
   useEffect(() => {
-    async function recordView() {
-      await recordArticleView(articleId);
-      router.refresh();
+    if (hasRecordedView.current) {
+      return;
     }
 
-    recordView();
-  }, [articleId, router]);
+    hasRecordedView.current = true;
+
+    recordArticleView(articleId);
+  }, [articleId]);
 
   return null;
 }

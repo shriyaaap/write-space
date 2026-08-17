@@ -82,10 +82,11 @@ export default async function ArticlePage({
     ? article.claps.some((clap) => clap.userId === userId)
     : false;
   const readTime = calculateReadTime(article.content);
-  <ArticleView articleId={article.id} />
+  
 
   return (
     <main className="article-page">
+      <ArticleView articleId={article.id} />
       <article className="article-container">
         <header className="article-header">
           <div className="article-author">
