@@ -1,14 +1,43 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
-import { getSessionUserId } from "@/lib/auth/session";
 import { logout } from "@/app/actions/auth";
 
-export default async function Navbar() {
-  const userId = await getSessionUserId();
+type NavbarProps = {
+  userId: string | null;
+  username: string | null;
+  avatar: string | null;
+  sidebarOpen: boolean;
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function Navbar({
+  userId,
+  username,
+  avatar,
+  sidebarOpen,
+  setSidebarOpen,
+}: NavbarProps) {
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  const firstLetter =
+    username?.charAt(0).toUpperCase() || "U";
+
   return (
     <header className={styles.navbar}>
       <div className={styles.navbarLeft}>
-        <button className={styles.menuButton} aria-label="Open menu">
+        <button
+          type="button"
+          className={styles.menuButton}
+          aria-label={
+            sidebarOpen ? "Close menu" : "Open menu"
+          }
+          onClick={() =>
+            setSidebarOpen((current) => !current)
+          }
+        >
           ☰
         </button>
 
@@ -18,24 +47,56 @@ export default async function Navbar() {
       </div>
 
       <div className={styles.navbarRight}>
-
-      {userId ? (
-        <>
-          <form action={logout}>
+        {userId ? (
+          <div className={styles.profileMenu}>
             <button
-              type="submit"
-              className={styles.logoutButton}
+              type="button"
+              className={styles.profileButton}
+              aria-label="Open profile menu"
+              aria-expanded={profileOpen}
+              onClick={() =>
+                setProfileOpen((current) => !current)
+              }
             >
-              Logout
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt={username || "Profile"}
+                  className={styles.profileAvatar}
+                />
+              ) : (
+                <span className={styles.profileLetter}>
+                  {firstLetter}
+                </span>
+              )}
             </button>
-          </form>
-        </>
-      ) : (
-        <>
-          <Link href="/login">Log in</Link>
-        </>
-      )}
-    </div>
+
+            {profileOpen && (
+              <div className={styles.profileDropdown}>
+                <p className={styles.profileName}>
+                  {username}
+                </p>
+
+                <form action={logout}>
+                  <button
+                    type="submit"
+                    className={styles.profileLogout}
+                  >
+                    Logout
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className={styles.loginButton}
+          >
+            Get Started
+          </Link>
+        )}
+      </div>
     </header>
   );
 }

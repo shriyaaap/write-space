@@ -5,9 +5,10 @@
 }
 
 .comments-section h2 {
-  margin-bottom: 24px;
+  margin: 0 0 24px;
   font-family: Georgia, serif;
   font-size: 28px;
+  line-height: 1.2;
 }
 
 .comment-form {
@@ -19,11 +20,19 @@
 
 .comment-form textarea {
   width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
   padding: 14px;
   border: 1px solid #d5d5d5;
   border-radius: 8px;
   font: inherit;
+  line-height: 1.5;
   resize: vertical;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: #242424;
 }
 
 .comment-form button {
@@ -34,6 +43,7 @@
   background: #242424;
   color: white;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .comment-form button:disabled {
@@ -45,6 +55,7 @@
   margin: 0;
   color: #c0392b;
   font-size: 14px;
+  line-height: 1.4;
 }
 
 .comments-list {
@@ -69,22 +80,26 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .comment-author div {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .comment-author span {
   color: #6b6b6b;
   font-size: 13px;
+  overflow-wrap: break-word;
 }
 
 .comment > p {
   margin: 0 0 10px;
   line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
 .comment > time {
@@ -99,9 +114,75 @@
   color: #c62828;
   font-size: 13px;
   cursor: pointer;
-  padding: 10px;
+  padding: 10px 0;
 }
 
 .delete-comment-button:hover {
   text-decoration: underline;
+}
+
+/* Tablet */
+@media (max-width: 700px) {
+  .comments-section {
+    margin-top: 60px;
+    padding-top: 32px;
+  }
+
+  .comments-section h2 {
+    font-size: 25px;
+  }
+
+  .comment {
+    padding: 20px 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .comments-section {
+    margin-top: 50px;
+    padding-top: 28px;
+  }
+
+  .comments-section h2 {
+    margin-bottom: 20px;
+    font-size: 23px;
+  }
+
+  .comment-form {
+    margin-bottom: 30px;
+  }
+
+  .comment-form textarea {
+    min-height: 90px;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .comment-form button {
+    width: 100%;
+    padding: 11px 18px;
+  }
+
+  .comment {
+    padding: 18px 0;
+  }
+
+  .comment-author img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .comment > p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .comment > time {
+    font-size: 12px;
+  }
+
+  .delete-comment-button {
+    font-size: 12px;
+  }
 }

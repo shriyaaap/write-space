@@ -20,12 +20,14 @@
   font-size: 40px;
   font-weight: 600;
   color: #242424;
+  line-height: 1.2;
 }
 
 .writeHeader p {
   margin: 0;
   color: #6b6b6b;
   font-size: 15px;
+  line-height: 1.5;
 }
 
 .writeForm {
@@ -41,7 +43,6 @@
   border: none;
   border-bottom: 1px solid #e6e6e6;
   outline: none;
-
   font-family: Georgia, serif;
   font-size: 36px;
   font-weight: 600;
@@ -58,20 +59,18 @@
   min-height: 70px;
   box-sizing: border-box;
   padding: 10px 0;
-
   border: none;
   border-bottom: 1px solid #e6e6e6;
   outline: none;
-
   font-size: 18px;
   line-height: 1.5;
   color: #242424;
   background: transparent;
-
   resize: vertical;
 }
 
-.writeDescription::placeholder {
+.writeDescription::placeholder,
+.writeContent::placeholder {
   color: #999999;
 }
 
@@ -80,50 +79,91 @@
   min-height: 400px;
   box-sizing: border-box;
   padding: 10px 0;
-
   border: none;
   outline: none;
-
   font-size: 18px;
   line-height: 1.7;
   color: #242424;
   background: transparent;
-
   resize: vertical;
-}
-
-.writeContent::placeholder {
-  color: #999999;
 }
 
 .writeActions {
   display: flex;
   justify-content: flex-end;
-
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid #e6e6e6;
 }
 
-.saveDraftButton {
+.saveDraftButton,
+.publishButton {
   border: none;
   border-radius: 24px;
-
   padding: 10px 20px;
-
   background: #242424;
   color: #ffffff;
-
   font-size: 14px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.saveDraftButton:hover {
+.saveDraftButton:hover,
+.publishButton:hover {
   background: #444444;
 }
 
+.scheduleSection {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.scheduleSection label {
+  font-size: 14px;
+  color: #555555;
+}
+
+.scheduleInput {
+  max-width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.scheduleButton {
+  padding: 9px 16px;
+  border: 1px solid #242424;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #242424;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.scheduleButton:hover {
+  background: #242424;
+  color: #ffffff;
+}
+
+/* Tablet */
 @media (max-width: 700px) {
   .writePage {
     padding: 90px 20px 40px;
+  }
+
+  .writeHeader {
+    margin-bottom: 30px;
   }
 
   .writeHeader h1 {
@@ -139,64 +179,79 @@
   }
 
   .writeContent {
+    min-height: 350px;
     font-size: 17px;
+  }
+
+  .writeActions {
+    justify-content: flex-start;
   }
 }
 
-.writeActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
+/* Mobile */
+@media (max-width: 480px) {
+  .writePage {
+    padding: 85px 16px 40px;
+  }
 
-.publishButton {
-  padding: 10px 20px;
-  margin: 20px;
-  border: none;
-  border-radius: 20px;
-  background: #242424;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-}
+  .writeHeader {
+    margin-bottom: 24px;
+  }
 
-.publishButton:hover {
-  background: #444;
-}
+  .writeHeader h1 {
+    font-size: 28px;
+  }
 
-.scheduleSection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e5e5;
-}
+  .writeHeader p {
+    font-size: 14px;
+  }
 
-.scheduleSection label {
-  font-size: 14px;
-  color: #555;
-}
+  .writeForm {
+    gap: 16px;
+  }
 
-.scheduleInput {
-  padding: 9px 10px;
-  border: 1px solid #d5d5d5;
-  border-radius: 6px;
-  font-size: 14px;
-}
+  .writeInput {
+    font-size: 25px;
+    padding: 8px 0;
+  }
 
-.scheduleButton {
-  padding: 9px 16px;
-  border: 1px solid #242424;
-  border-radius: 20px;
-  background: white;
-  color: #242424;
-  font-size: 14px;
-  cursor: pointer;
-}
+  .writeDescription {
+    min-height: 60px;
+    font-size: 15px;
+  }
 
-.scheduleButton:hover {
-  background: #242424;
-  color: white;
+  .writeContent {
+    min-height: 300px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .writeActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding-top: 16px;
+  }
+
+  .saveDraftButton,
+  .publishButton {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .scheduleSection {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .scheduleSection label {
+    font-size: 13px;
+  }
+
+  .scheduleInput,
+  .scheduleButton {
+    width: 100%;
+  }
 }

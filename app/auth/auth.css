@@ -11,6 +11,7 @@
   width: 100%;
   max-width: 420px;
   padding: 40px;
+  box-sizing: border-box;
   background: white;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
@@ -20,11 +21,13 @@
   margin: 0 0 8px;
   font-family: Georgia, serif;
   font-size: 32px;
+  line-height: 1.2;
 }
 
 .auth-card p {
   margin-bottom: 30px;
   color: #6b6b6b;
+  line-height: 1.5;
 }
 
 .auth-card form {
@@ -41,6 +44,8 @@
 }
 
 .auth-card input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 11px 12px;
   border: 1px solid #d5d5d5;
   border-radius: 6px;
@@ -48,6 +53,7 @@
 }
 
 .auth-card button {
+  width: 100%;
   margin-top: 8px;
   padding: 12px;
   border: none;
@@ -74,4 +80,53 @@
 
 .auth-link:hover {
   text-decoration: underline;
+}
+
+/* Tablet */
+@media (max-width: 600px) {
+  .auth-page {
+    padding: 30px 16px;
+  }
+
+  .auth-card {
+    padding: 32px 28px;
+  }
+
+  .auth-card h1 {
+    font-size: 29px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 400px) {
+  .auth-page {
+    padding: 24px 12px;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
+    border-radius: 10px;
+  }
+
+  .auth-card h1 {
+    font-size: 27px;
+  }
+
+  .auth-card p {
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+
+  .auth-card form {
+    gap: 15px;
+  }
+
+  .auth-card input {
+    font-size: 15px;
+    padding: 10px 11px;
+  }
+
+  .auth-card button {
+    padding: 11px;
+  }
 }

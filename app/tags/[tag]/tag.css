@@ -5,6 +5,7 @@
 }
 
 .tag-container {
+  width: 100%;
   max-width: 850px;
   margin: 0 auto;
 }
@@ -23,12 +24,15 @@
   margin: 0;
   font-family: Georgia, serif;
   font-size: 42px;
+  line-height: 1.2;
   color: #242424;
+  overflow-wrap: break-word;
 }
 
 .tag-header p:last-child {
   margin-top: 10px;
   color: #6b6b6b;
+  line-height: 1.5;
 }
 
 .tag-container hr {
@@ -40,4 +44,55 @@
 .tag-empty {
   color: #6b6b6b;
   margin-top: 30px;
+}
+
+/* Tablet */
+@media (max-width: 700px) {
+  .tag-page {
+    padding: 100px 20px 60px;
+  }
+
+  .tag-header {
+    padding-bottom: 24px;
+  }
+
+  .tag-header h1 {
+    font-size: 34px;
+  }
+
+  .tag-container hr {
+    margin-bottom: 26px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .tag-page {
+    padding: 90px 16px 50px;
+  }
+
+  .tag-header {
+    padding-bottom: 20px;
+  }
+
+  .tag-label {
+    font-size: 13px;
+  }
+
+  .tag-header h1 {
+    font-size: 29px;
+  }
+
+  .tag-header p:last-child {
+    font-size: 14px;
+  }
+
+  .tag-container hr {
+    margin-bottom: 24px;
+  }
+
+  .tag-empty {
+    margin-top: 24px;
+    font-size: 14px;
+  }
 }

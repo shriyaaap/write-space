@@ -5,6 +5,7 @@
 }
 
 .profile-container {
+  width: 100%;
   max-width: 850px;
   margin: 0 auto;
 }
@@ -24,17 +25,23 @@
   flex-shrink: 0;
 }
 
+.profile-info {
+  min-width: 0;
+}
+
 .profile-info h1 {
   margin: 0 0 6px;
   font-family: Georgia, serif;
   font-size: 36px;
   color: #242424;
+  overflow-wrap: break-word;
 }
 
 .profile-username {
   margin: 0 0 12px;
   color: #6b6b6b;
   font-size: 15px;
+  overflow-wrap: break-word;
 }
 
 .profile-bio {
@@ -43,6 +50,7 @@
   font-size: 16px;
   line-height: 1.5;
   max-width: 600px;
+  overflow-wrap: break-word;
 }
 
 .profile-divider {
@@ -62,6 +70,7 @@
   margin-top: 30px;
 }
 
+/* Tablet */
 @media (max-width: 700px) {
   .profile-page {
     padding: 100px 20px 60px;
@@ -69,6 +78,7 @@
 
   .profile-header {
     align-items: flex-start;
+    gap: 18px;
   }
 
   .profile-avatar {
@@ -78,5 +88,55 @@
 
   .profile-info h1 {
     font-size: 28px;
+  }
+
+  .profile-bio {
+    font-size: 15px;
+  }
+
+  .profile-articles h2 {
+    font-size: 25px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .profile-page {
+    padding: 90px 16px 50px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 24px;
+  }
+
+  .profile-avatar {
+    width: 68px;
+    height: 68px;
+  }
+
+  .profile-info h1 {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+
+  .profile-username {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .profile-bio {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .profile-divider {
+    margin-bottom: 24px;
+  }
+
+  .profile-articles h2 {
+    font-size: 23px;
   }
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./Sidebar.css";
+import { usePathname } from "next/navigation";
 
 function HomeIcon() {
   return (
@@ -144,31 +145,41 @@ function WriteIcon() {
 
 
 export default function Sidebar() {
+
+  const pathname = usePathname();
   
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
-        <Link href="/" className="sidebar-link">
+        <Link href="/" className={`sidebar-link ${pathname === "/" ? "active" : ""}`}>
           <HomeIcon/>
           <span>Home</span>
         </Link>
 
-        <Link href="/following" className="sidebar-link">
+        <Link href="/following" className={`sidebar-link ${
+            pathname === "/following" ? "active" : ""
+          }`}>
           <FollowingIcon/>
           <span>Following</span>
         </Link>
 
-        <Link href="/dashboard" className="sidebar-link">
+        <Link href="/dashboard" className={`sidebar-link ${
+            pathname === "/dashboard" ? "active" : ""
+          }`}>
           <DashboardIcon/>
           <span>Dashboard</span>
         </Link>
 
-        <Link href="/write" className="sidebar-link">
+        <Link href="/write" className={`sidebar-link ${
+            pathname === "/write" ? "active" : ""
+          }`}>
           <WriteIcon/>
           <span>Write</span>
         </Link>
 
-        <Link href="/search" className="sidebar-link">
+        <Link href="/search" className={`sidebar-link ${
+            pathname === "/search" ? "active" : ""
+          }`}>
           <SearchIcon/>
           <span>Explore</span>
         </Link>

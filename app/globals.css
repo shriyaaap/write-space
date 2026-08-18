@@ -8,6 +8,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -22,6 +24,32 @@ select {
   font: inherit;
 }
 
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+img {
+  max-width: 100%;
+}
+
 a {
   color: inherit;
+}
+
+/* Improve touch interaction on smaller screens */
+@media (max-width: 480px) {
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }

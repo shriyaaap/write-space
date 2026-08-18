@@ -8,6 +8,7 @@
   max-width: 850px;
   margin: 0 auto;
   padding: 100px 40px 60px;
+  box-sizing: border-box;
 }
 
 .following-header {
@@ -20,12 +21,14 @@
   font-family: Georgia, serif;
   font-size: 32px;
   color: #242424;
+  overflow-wrap: break-word;
 }
 
 .following-header p {
   margin: 0;
   color: #6b6b6b;
   font-size: 15px;
+  line-height: 1.5;
 }
 
 .following-empty {
@@ -34,17 +37,61 @@
 }
 
 .following-empty h2 {
-  margin-bottom: 8px;
+  margin: 0 0 8px;
   font-family: Georgia, serif;
   color: #242424;
+  font-size: 24px;
 }
 
 .following-empty p {
+  margin: 0;
   color: #6b6b6b;
+  line-height: 1.5;
 }
 
+/* Tablet */
 @media (max-width: 700px) {
   .following-container {
-    padding: 100px 20px 40px;
+    padding: 90px 20px 40px;
+  }
+
+  .following-header h1 {
+    font-size: 29px;
+  }
+
+  .following-empty {
+    padding: 50px 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .following-container {
+    padding: 85px 16px 40px;
+  }
+
+  .following-header {
+    padding-bottom: 20px;
+  }
+
+  .following-header h1 {
+    font-size: 27px;
+    line-height: 1.2;
+  }
+
+  .following-header p {
+    font-size: 14px;
+  }
+
+  .following-empty {
+    padding: 40px 10px;
+  }
+
+  .following-empty h2 {
+    font-size: 22px;
+  }
+
+  .following-empty p {
+    font-size: 14px;
   }
 }
