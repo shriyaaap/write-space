@@ -1,0 +1,30 @@
+.progressContainer{
+    position: fixed;
+    width: 100%;
+    max-width: 760px;
+    top: 65px;
+    display: flex;
+    align-items:center;
+    background:rgb(0, 0, 0, 0.03);
+    backdrop-filter: blur(10px);
+    padding:0px 5px;
+    border-radius:5px;
+}
+
+.progressBar{
+    background-color: rgb(0, 0, 0, 0.10);
+    height: 10px;
+    border-radius: 20px;
+    width : 95%
+}
+.progressText{
+    margin-left:5px;
+    margin-top:0px;
+    font-size:18px;
+    font-weight:bold;
+}
+.progressBarFill{
+    height: 10px;
+    border-radius: 20px;
+    background-color: black;
+}

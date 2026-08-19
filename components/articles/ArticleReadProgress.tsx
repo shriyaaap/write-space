@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import styles from "./ArticleReadProgress.module.css"
 
 type Props = {
     articleId: string;
@@ -52,30 +53,13 @@ export default function ArticleReadProgress({ articleId }: Props) {
     if (progress === 0) return null;
 
     return (
-        <div
-            style={{
-                position: "fixed",
-                width: "100%",
-                maxWidth: "760px",
-                top: "65px",
-            }}
-        >
-            <div
-                style={{
-                    backgroundColor: "rgb(0, 0, 0, 0.1)",
-                    height: "10px",
-                    borderRadius: "20px",
-                }}
-            >
-                <div
-                    style={{
-                        height: "10px",
-                        width: `${progress}%`,
-                        backgroundColor: "currentColor",
-                        borderRadius: "20px",
-                    }}
-                />
+        <div className={styles.progressContainer}>
+            <div className={styles.progressBar}>
+                <div style={{
+                    width: `${progress}%`
+                }} className={styles.progressBarFill} />
             </div>
+            <p className={styles.progressText}>{progress}%</p>
         </div>
     );
 }
