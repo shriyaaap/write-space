@@ -13,6 +13,7 @@ import ArticleView from "@/components/articles/ArticleView";
 import Comments from "@/components/Comments/Comment";
 import ClapButton from "@/components/ClapButton/ClapButton";
 import FollowButton from "@/components/FollowButton/FollowButton";
+import ArticleReadProgress from "@/components/articles/ArticleReadProgress";
 
 
 type ArticlePageProps = {
@@ -88,6 +89,7 @@ export default async function ArticlePage({
     <main className="article-page">
       <ArticleView articleId={article.id} />
       <article className="article-container">
+        <ArticleReadProgress articleId={article.id} />
         <header className="article-header">
           <div className="article-author">
             {article.author.avatar && (
