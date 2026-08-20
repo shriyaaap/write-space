@@ -53,7 +53,12 @@ export default function ArticleReadProgress({ articleId }: Props) {
     if (progress === 0) return null;
 
     return (
-        <div className={styles.progressContainer}>
+        <div
+            className={styles.progressContainer}
+            aria-label="Reading progress"
+            data-tooltip="Reading progress"
+            tabIndex={0}
+        >
             <div className={styles.progressBar}>
                 <div style={{
                     width: `${progress}%`

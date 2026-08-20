@@ -1,30 +1,61 @@
-.progressContainer{
-    position: fixed;
-    width: 100%;
-    max-width: 760px;
-    top: 65px;
-    display: flex;
-    align-items:center;
-    background:rgb(0, 0, 0, 0.03);
-    backdrop-filter: blur(10px);
-    padding:0px 5px;
-    border-radius:5px;
+.progressContainer {
+  position: fixed;
+  width: 100%;
+  max-width: 760px;
+  top: 65px;
+  display: flex;
+  align-items: center;
+  background: rgb(0, 0, 0, 0.03);
+  backdrop-filter: blur(10px);
+  padding: 0px 5px;
+  border-radius: 5px;
 }
 
-.progressBar{
-    background-color: rgb(0, 0, 0, 0.10);
-    height: 10px;
-    border-radius: 20px;
-    width : 95%
+.progressContainer::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -4px);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
 }
-.progressText{
-    margin-left:5px;
-    margin-top:0px;
-    font-size:18px;
-    font-weight:bold;
+
+.progressContainer:hover::after,
+.progressContainer:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
-.progressBarFill{
-    height: 10px;
-    border-radius: 20px;
-    background-color: black;
+
+.progressContainer:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.progressBar {
+  background-color: rgb(0, 0, 0, 0.1);
+  height: 10px;
+  border-radius: 20px;
+  width: 95%;
+}
+.progressText {
+  margin-left: 5px;
+  margin-top: 0px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.progressBarFill {
+  height: 10px;
+  border-radius: 20px;
+  background-color: black;
 }
