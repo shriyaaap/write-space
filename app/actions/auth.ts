@@ -51,7 +51,7 @@ export async function signup(formData: FormData) {
 
   await createSession(user.id);
 
-  redirect("/dasboard");
+  redirect("/dashboard");
 }
 
 export async function login(formData: FormData) {
