@@ -27,7 +27,8 @@ export default function NavigationClient({
         setSidebarOpen={setSidebarOpen}
       />
 
-      <Sidebar />
+      {/* Pass userId and sidebarOpen props so Sidebar can check login status */}
+      <Sidebar userId={userId} isOpen={sidebarOpen} />
     </>
   );
 }

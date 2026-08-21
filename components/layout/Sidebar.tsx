@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import "./Sidebar.css";
 import { usePathname } from "next/navigation";
@@ -143,44 +145,64 @@ function WriteIcon() {
   );
 }
 
+type SidebarProps = {
+  userId?: string | null;
+  isOpen?: boolean;
+};
 
-export default function Sidebar() {
-
+export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
   const pathname = usePathname();
-  
+
+  // If user is not logged in or sidebar toggle is closed, don't render anything
+  if (!userId || !isOpen) {
+    return null;
+  }
+
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
         <Link href="/" className={`sidebar-link ${pathname === "/" ? "active" : ""}`}>
-          <HomeIcon/>
+          <HomeIcon />
           <span>Home</span>
         </Link>
 
-        <Link href="/following" className={`sidebar-link ${
+        <Link
+          href="/following"
+          className={`sidebar-link ${
             pathname === "/following" ? "active" : ""
-          }`}>
-          <FollowingIcon/>
+          }`}
+        >
+          <FollowingIcon />
           <span>Following</span>
         </Link>
 
-        <Link href="/dashboard" className={`sidebar-link ${
+        <Link
+          href="/dashboard"
+          className={`sidebar-link ${
             pathname === "/dashboard" ? "active" : ""
-          }`}>
-          <DashboardIcon/>
+          }`}
+        >
+          <DashboardIcon />
           <span>Dashboard</span>
         </Link>
 
-        <Link href="/write" className={`sidebar-link ${
+        <Link
+          href="/write"
+          className={`sidebar-link ${
             pathname === "/write" ? "active" : ""
-          }`}>
-          <WriteIcon/>
+          }`}
+        >
+          <WriteIcon />
           <span>Write</span>
         </Link>
 
-        <Link href="/search" className={`sidebar-link ${
+        <Link
+          href="/search"
+          className={`sidebar-link ${
             pathname === "/search" ? "active" : ""
-          }`}>
-          <SearchIcon/>
+          }`}
+        >
+          <SearchIcon />
           <span>Explore</span>
         </Link>
       </nav>
