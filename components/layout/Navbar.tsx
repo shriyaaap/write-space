@@ -29,18 +29,16 @@ export default function Navbar({
   return (
     <header className={styles.navbar}>
       <div className={styles.navbarLeft}>
-        <button
-          type="button"
-          className={styles.menuButton}
-          aria-label={
-            sidebarOpen ? "Close menu" : "Open menu"
-          }
-          onClick={() =>
-            setSidebarOpen((current) => !current)
-          }
-        >
-          ☰
-        </button>
+        {userId && (
+          <button
+            type="button"
+            className={styles.menuButton}
+            aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+            onClick={() => setSidebarOpen((current) => !current)}
+          >
+            ☰
+          </button>
+        )}
 
         <Link href="/" className={styles.logo}>
           WriteSpace

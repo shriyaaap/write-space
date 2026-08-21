@@ -51,7 +51,7 @@ export async function signup(formData: FormData) {
 
   await createSession(user.id);
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function login(formData: FormData) {
@@ -89,7 +89,7 @@ export async function login(formData: FormData) {
 
   await createSession(user.id);
 
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function logout() {

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { getPublishedArticles } from "@/lib/articles/queries";
 import { getSessionUserId } from "@/lib/auth/session";
 import ArticleCard from "@/components/articles/ArticleCard";
@@ -20,18 +21,29 @@ export default async function Home({
     return (
       <main className="landing-container">
         <section className="full-page-hero">
-          <div className="hero-content">
-            <h1 className="hero-quote">
-              &ldquo;An article is not a piece of paper; it is a paper which brings peace.&rdquo;
-            </h1>
-            <p className="hero-subtext">
-              Discover insightful stories, deep dives, and ideas that bring clarity.
-            </p>
-            <Link href="/login" className="hero-btn-primary">
-              Get Started
-            </Link>
-          </div>
-        </section>
+        <div className="hero-content">
+          <h1 className="hero-quote">
+            Create, Share
+            <br />
+            & Inspire.
+          </h1>
+
+          <p className="hero-subtext">
+            A place to read, write, and share your ideas.
+          </p>
+
+          <Link href="/signup" className="hero-btn-primary">
+            Start writing
+          </Link>
+        </div>
+
+        <div className="hero-art">
+          <img
+            src="/images/write-space-hero.png"
+            alt=""
+          />
+        </div>
+      </section>
       </main>
     );
   }

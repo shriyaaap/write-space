@@ -125,6 +125,244 @@
   font-size: 14px;
 }
 
+.landing-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  color: #242424;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.full-page-hero {
+  position: relative;
+
+  min-height: calc(100vh - 80px);
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  background: #ffffff;
+}
+
+/* =========================
+   LEFT CONTENT
+========================= */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  width: 55%;
+  max-width: 900px;
+
+  padding: 6rem 0 6rem 7.5vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Main heading */
+
+.hero-quote {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(4rem, 6.5vw, 7.5rem);
+
+  font-weight: 400;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.06em;
+
+  color: #242424;
+}
+
+/* Supporting text */
+
+.hero-subtext {
+  margin: 2.5rem 0 0;
+
+  max-width: 600px;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+
+  line-height: 1.45;
+
+  color: #242424;
+}
+
+/* CTA */
+
+.hero-btn-primary {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 2.5rem;
+
+  padding: 0.85rem 2rem;
+
+  min-width: 180px;
+
+  border-radius: 999px;
+
+  background: #191919;
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 1.05rem;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.hero-btn-primary:hover {
+  background: #000000;
+
+  transform: translateY(-1px);
+}
+
+.hero-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   RIGHT ARTWORK
+========================= */
+
+.hero-art {
+  position: absolute;
+  top: 0;
+
+  /* move the whole artwork left */
+  right: 3%;
+
+  width: 48%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-art img {
+  /* make image smaller */
+  width: 85%;
+  height: auto;
+
+  display: block;
+
+  /* move image slightly left */
+  transform: translateX(-8%);
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1000px) {
+  .hero-content {
+    width: 60%;
+
+    padding-left: 5vw;
+  }
+
+  .hero-art {
+    width: 45%;
+  }
+
+  .hero-art img {
+    width: 140%;
+  }
+
+  .hero-quote {
+    font-size: clamp(3.5rem, 7vw, 6rem);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+  .full-page-hero {
+    min-height: calc(100vh - 65px);
+
+    display: block;
+
+    padding-bottom: 0;
+  }
+
+  .hero-content {
+    width: 100%;
+
+    padding: 4rem 1.5rem 3rem;
+
+    align-items: flex-start;
+  }
+
+  .hero-quote {
+    font-size: clamp(3.5rem, 16vw, 5.5rem);
+
+    line-height: 0.92;
+  }
+
+  .hero-subtext {
+    margin-top: 1.75rem;
+
+    font-size: 1.05rem;
+  }
+
+  .hero-btn-primary {
+    margin-top: 2rem;
+  }
+
+  .hero-art {
+    position: relative;
+
+    width: 100%;
+    height: 300px;
+
+    margin-top: 1rem;
+
+    justify-content: center;
+  }
+
+  .hero-art img {
+    width: 110%;
+
+    transform: translateX(5%);
+  }
+}
+
+
+
 /* Tablet */
 @media (max-width: 700px) {
   .feed {
@@ -226,5 +464,27 @@
   .pagination a,
   .pagination span {
     font-size: 13px;
+  }
+  .full-page-hero {
+    min-height: calc(100vh - 65px);
+    padding: 3rem 1.5rem;
+  }
+
+  .hero-content {
+    padding: 2rem 0;
+  }
+
+  .hero-quote {
+    font-size: clamp(3.5rem, 15vw, 5rem);
+    line-height: 0.98;
+  }
+
+  .hero-subtext {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero-btn-primary {
+    margin-top: 1.75rem;
   }
 }
