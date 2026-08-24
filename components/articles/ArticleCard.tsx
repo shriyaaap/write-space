@@ -66,8 +66,6 @@ export default function ArticleCard({ article }: ArticleCardProps) {
               <span key={tag.name}>#{tag.name}</span>
             ))}
           </div>
-
-          <span>5 min read</span>
         </div>
       </div>
 

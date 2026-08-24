@@ -15,7 +15,7 @@ export default async function Home({
 }: HomePageProps) {
   // Check session status directly
   const userId = await getSessionUserId();
-
+  
   // 1. UNAUTHENTICATED USER: Show Hero Banner ONLY
   if (!userId) {
     return (
@@ -53,6 +53,8 @@ export default async function Home({
   const requestedPage = Number(params.page) || 1;
   const page = Math.min(Math.max(requestedPage, 1), 3);
   const articles = await getPublishedArticles(page, 10);
+  
+
 
   return (
     <main className="home-page">

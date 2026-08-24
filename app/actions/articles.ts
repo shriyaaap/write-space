@@ -3,22 +3,65 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
+import { z } from "zod";
 
-export async function createDraft(formData: FormData) {
+const articleSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "Title is required"),
+
+  description: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal("")),
+
+  content: z
+    .string()
+    .trim()
+    .min(1, "Content is required"),
+});
+
+type ActionState = {
+  error?: string;
+};
+
+function createSlug(title: string) {
+  return `${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")}-${Date.now()}`;
+}
+
+
+/* -----------------------------
+   Create Draft
+----------------------------- */
+
+export async function createDraft(
+  prevState: { error?: string } | null,
+  formData: FormData
+) {
   const userId = await getSessionUserId();
 
   if (!userId) {
     redirect("/login");
   }
 
-  const title = formData.get("title")?.toString().trim() || "";
-  const description =
-    formData.get("description")?.toString().trim() || "";
-  const content = formData.get("content")?.toString().trim() || "";
+  const result = articleSchema.safeParse({
+    title: formData.get("title")?.toString() ?? "",
+    description: formData.get("description")?.toString() ?? "",
+    content: formData.get("content")?.toString() ?? "",
+  });
 
-  if (!title) {
-    return;
+  if (!result.success) {
+    return {
+      error: result.error.issues[0].message,
+    };
   }
+
+  const { title, description, content } = result.data;
 
   const slug = `${title
     .toLowerCase()
@@ -39,7 +82,15 @@ export async function createDraft(formData: FormData) {
   redirect("/dashboard");
 }
 
-export async function updateDraft(formData: FormData) {
+
+/* -----------------------------
+   Update Draft
+----------------------------- */
+
+export async function updateDraft(
+  prevState: ActionState | null,
+  formData: FormData
+) {
   const userId = await getSessionUserId();
 
   if (!userId) {
@@ -48,28 +99,38 @@ export async function updateDraft(formData: FormData) {
 
   const id = formData.get("id")?.toString();
 
-  const title = formData.get("title")?.toString().trim() || "";
+  if (!id) {
+    return {
+      error: "Article ID is missing.",
+    };
+  }
 
-  const description =
-    formData.get("description")?.toString().trim() || "";
+  const result = articleSchema.safeParse({
+    title: formData.get("title")?.toString() ?? "",
+    description: formData.get("description")?.toString() ?? "",
+    content: formData.get("content")?.toString() ?? "",
+  });
 
-  const content =
-    formData.get("content")?.toString().trim() || "";
-
-  if (!id || !title || !content) {
-    return;
+  if (!result.success) {
+    return {
+      error: result.error.issues[0].message,
+    };
   }
 
   const article = await prisma.article.findFirst({
     where: {
       id,
       authorId: userId,
-      status: "DRAFT",
+      status: {
+        in: ["DRAFT", "SCHEDULED"],
+      },
     },
   });
 
   if (!article) {
-    return;
+    return {
+      error: "Article not found.",
+    };
   }
 
   await prisma.article.update({
@@ -77,100 +138,204 @@ export async function updateDraft(formData: FormData) {
       id: article.id,
     },
     data: {
-      title,
-      description,
-      content,
+      title: result.data.title,
+      description: result.data.description,
+      content: result.data.content,
+      status: "DRAFT",
+      scheduledAt: null,
     },
   });
 
   redirect("/dashboard");
 }
 
-export async function publishArticle(formData: FormData) {
+
+/* -----------------------------
+   Publish Article
+----------------------------- */
+
+export async function publishArticle(
+  prevState: ActionState | null,
+  formData: FormData
+) {
   const userId = await getSessionUserId();
 
   if (!userId) {
     redirect("/login");
   }
 
-  const title = formData.get("title")?.toString().trim() || "";
-  const description =
-    formData.get("description")?.toString().trim() || "";
-  const content =
-    formData.get("content")?.toString().trim() || "";
+  const result = articleSchema.safeParse({
+    title: formData.get("title")?.toString() ?? "",
+    description: formData.get("description")?.toString() ?? "",
+    content: formData.get("content")?.toString() ?? "",
+  });
 
-  if (!title || !content) {
-    return;
+  if (!result.success) {
+    return {
+      error: result.error.issues[0].message,
+    };
   }
 
-  const slug = `${title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")}-${Date.now()}`;
+  const { title, description, content } = result.data;
 
-  await prisma.article.create({
-    data: {
-      title,
-      slug,
-      description,
-      content,
-      status: "PUBLISHED",
-      publishedAt: new Date(),
-      authorId: userId,
-    },
-  });
+  const id = formData.get("id")?.toString();
+
+  // EDIT EXISTING ARTICLE
+  if (id) {
+    const article = await prisma.article.findFirst({
+      where: {
+        id,
+        authorId: userId,
+        status: {
+          in: ["DRAFT", "SCHEDULED"],
+        },
+      },
+    });
+
+    if (!article) {
+      return {
+        error: "Article not found.",
+      };
+    }
+
+    await prisma.article.update({
+      where: {
+        id: article.id,
+      },
+      data: {
+        title,
+        description,
+        content,
+        status: "PUBLISHED",
+        publishedAt: new Date(),
+        scheduledAt: null,
+      },
+    });
+  }
+
+  // CREATE NEW ARTICLE
+  else {
+    await prisma.article.create({
+      data: {
+        title,
+        description,
+        content,
+        slug: createSlug(title),
+        status: "PUBLISHED",
+        publishedAt: new Date(),
+        authorId: userId,
+      },
+    });
+  }
 
   redirect("/dashboard");
 }
 
-export async function scheduleArticle(formData: FormData) {
+
+/* -----------------------------
+   Schedule Article
+----------------------------- */
+
+export async function scheduleArticle(
+  prevState: ActionState | null,
+  formData: FormData
+) {
   const userId = await getSessionUserId();
 
   if (!userId) {
     redirect("/login");
   }
 
-  const title = formData.get("title")?.toString().trim() || "";
-  const description =
-    formData.get("description")?.toString().trim() || "";
-  const content =
-    formData.get("content")?.toString().trim() || "";
+  const result = articleSchema.safeParse({
+    title: formData.get("title")?.toString() ?? "",
+    description: formData.get("description")?.toString() ?? "",
+    content: formData.get("content")?.toString() ?? "",
+  });
+
+  if (!result.success) {
+    return {
+      error: result.error.issues[0].message,
+    };
+  }
+
   const scheduledAtValue =
-    formData.get("scheduledAt")?.toString() || "";
+    formData.get("scheduledAt")?.toString() ?? "";
 
-  if (!title || !content || !scheduledAtValue) {
-    return;
+  if (!scheduledAtValue) {
+    return {
+      error: "Please select a schedule date.",
+    };
   }
 
   const scheduledAt = new Date(scheduledAtValue);
 
-  if (Number.isNaN(scheduledAt.getTime())) {
-    return;
+  if (
+    Number.isNaN(scheduledAt.getTime()) ||
+    scheduledAt <= new Date()
+  ) {
+    return {
+      error: "Please select a future date and time.",
+    };
   }
 
-  if (scheduledAt <= new Date()) {
-    return;
+  const { title, description, content } = result.data;
+
+  const id = formData.get("id")?.toString();
+
+  // EDIT EXISTING ARTICLE
+  if (id) {
+    const article = await prisma.article.findFirst({
+      where: {
+        id,
+        authorId: userId,
+        status: {
+          in: ["DRAFT", "SCHEDULED"],
+        },
+      },
+    });
+
+    if (!article) {
+      return {
+        error: "Article not found.",
+      };
+    }
+
+    await prisma.article.update({
+      where: {
+        id: article.id,
+      },
+      data: {
+        title,
+        description,
+        content,
+        status: "SCHEDULED",
+        scheduledAt,
+        publishedAt: null,
+      },
+    });
   }
 
-  const slug = `${title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")}-${Date.now()}`;
-
-  await prisma.article.create({
-    data: {
-      title,
-      slug,
-      description,
-      content,
-      status: "SCHEDULED",
-      scheduledAt,
-      authorId: userId,
-    },
-  });
+  // CREATE NEW ARTICLE
+  else {
+    await prisma.article.create({
+      data: {
+        title,
+        description,
+        content,
+        slug: createSlug(title),
+        status: "SCHEDULED",
+        scheduledAt,
+        authorId: userId,
+      },
+    });
+  }
 
   redirect("/dashboard");
 }
+
+/* -----------------------------
+   Publish Scheduled Articles
+----------------------------- */
 
 export async function publishScheduledArticles() {
   const now = new Date();
@@ -201,6 +366,11 @@ export async function publishScheduledArticles() {
     },
   });
 }
+
+
+/* -----------------------------
+   Delete Article
+----------------------------- */
 
 export async function deleteArticle(formData: FormData) {
   const userId = await getSessionUserId();
@@ -235,6 +405,11 @@ export async function deleteArticle(formData: FormData) {
   redirect("/dashboard");
 }
 
+
+/* -----------------------------
+   Record Article View
+----------------------------- */
+
 export async function recordArticleView(articleId: string) {
   console.log("Recording view for:", articleId);
 
@@ -253,3 +428,4 @@ export async function recordArticleView(articleId: string) {
 
   return article.views;
 }
+
