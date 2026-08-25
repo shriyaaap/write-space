@@ -32,7 +32,7 @@ export default async function Home({
             A place to read, write, and share your ideas.
           </p>
 
-          <Link href="/signup" className="hero-btn-primary">
+          <Link href="/login" className="hero-btn-primary">
             Start writing
           </Link>
         </div>
@@ -45,6 +45,7 @@ export default async function Home({
         </div>
       </section>
       </main>
+      
     );
   }
 
@@ -91,5 +92,6 @@ export default async function Home({
         </div>
       </section>
     </main>
+    
   );
 }

@@ -9,12 +9,12 @@ import { getPublishedArticleBySlug, isFollowingUser, } from "@/lib/articles/quer
 import { getSessionUserId } from "@/lib/auth/session";
 import MarkdownContent from "@/components/articles/MarkdownContent";
 import ArticleView from "@/components/articles/ArticleView";
+import { Suspense } from "react";
 
 import Comments from "@/components/Comments/Comment";
 import ClapButton from "@/components/ClapButton/ClapButton";
 import FollowButton from "@/components/FollowButton/FollowButton";
 import ArticleReadProgress from "@/components/articles/ArticleReadProgress";
-
 
 type ArticlePageProps = {
   params: Promise<{
@@ -174,12 +174,14 @@ export default async function ArticlePage({
             <MarkdownContent content={article.content} />
         </div>
 
-        <Comments
-          articleId={article.id}
-          initialComments={article.comments}
-          articleAuthorId={article.author.id}
-          currentUserId={userId}
-        />
+        <Suspense fallback={<p>Loading comments...</p>}>
+          <Comments
+            articleId={article.id}
+            initialComments={article.comments}
+            articleAuthorId={article.author.id}
+            currentUserId={userId}
+          />
+        </Suspense>
       </article>
     </main>
   );

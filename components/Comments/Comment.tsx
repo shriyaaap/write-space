@@ -82,6 +82,7 @@ export default function Comments({
 }
 
   return (
+
     <section className="comments-section">
       <h2>Comments</h2>
 
@@ -148,5 +149,6 @@ export default function Comments({
         )}
       </div>
     </section>
+    
   );
 }
