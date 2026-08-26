@@ -1,6 +1,19 @@
+"use client";
+
+import { useActionState } from "react";
+import Link from "next/link";
 import { signup } from "@/app/actions/auth";
 
+const initialState = {
+  error: "",
+};
+
 export default function SignupPage() {
+  const [state, formAction, pending] = useActionState(
+    signup,
+    initialState
+  );
+
   return (
     <main className="auth-page">
       <div className="auth-card">
@@ -8,7 +21,7 @@ export default function SignupPage() {
 
         <p>Start writing and sharing your ideas.</p>
 
-        <form action={signup}>
+        <form action={formAction}>
           <label>
             Name
             <input
@@ -46,10 +59,21 @@ export default function SignupPage() {
             />
           </label>
 
-          <button type="submit">
-            Sign up
+          {state?.error && (
+            <p className="auth-error">{state.error}</p>
+          )}
+
+          <button type="submit" disabled={pending}>
+            {pending ? "Creating account..." : "Sign up"}
           </button>
         </form>
+
+        <p className="auth-switch">
+          Already have an account?{" "}
+          <Link href="/login" className="auth-link">
+            Log in
+          </Link>
+        </p>
       </div>
     </main>
   );

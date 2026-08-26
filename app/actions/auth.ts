@@ -5,7 +5,10 @@ import { prisma } from "@/lib/db/prisma";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { createSession, deleteSession } from "@/lib/auth/session";
 
-export async function signup(formData: FormData) {
+export async function signup(
+  prevState: { error: string },
+  formData: FormData
+) {
   const name = formData.get("name")?.toString().trim();
   const username = formData.get("username")?.toString().trim();
   const email = formData.get("email")?.toString().trim().toLowerCase();
@@ -54,7 +57,10 @@ export async function signup(formData: FormData) {
   redirect("/");
 }
 
-export async function login(formData: FormData) {
+export async function login(
+  prevState: { error: string },
+  formData: FormData
+) {
   const email = formData.get("email")?.toString().trim().toLowerCase();
   const password = formData.get("password")?.toString();
 
