@@ -63,7 +63,7 @@ export async function searchPublishedArticles(query: string) {
     return [];
   }
 
-  return prisma.article.findMany({
+  const articles = await prisma.article.findMany({
     where: {
       status: "PUBLISHED",
       title: {
@@ -79,6 +79,15 @@ export async function searchPublishedArticles(query: string) {
       tags: true,
     },
   });
+
+  console.log(
+    "SEARCH:",
+    search,
+    "RESULT TITLES:",
+    articles.map((article) => article.title)
+  );
+
+  return articles;
 }
 
 export async function getFollowingArticles(userId: string) {
@@ -107,6 +116,7 @@ export async function getAuthorByUsername(username: string) {
   return prisma.user.findUnique({
     where: {
       username,
+      mode: "insensitive",
     },
     include: {
       articles: {

@@ -32,7 +32,7 @@ export default function SearchInput() {
       type="search"
       value={query}
       onChange={(event) => setQuery(event.target.value)}
-      placeholder="Search articles..."
+      placeholder="Search articles or people..."
     />
   );
 }
