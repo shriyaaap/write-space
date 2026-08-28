@@ -160,3 +160,37 @@ export async function getArticlesByTag(tag: string) {
     },
   });
 }
+
+export async function searchUsers(query: string) {
+  const search = query.trim();
+
+  if (!search) {
+    return [];
+  }
+
+  return prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          username: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    },
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      avatar: true,
+    },
+    take: 10,
+  });
+}

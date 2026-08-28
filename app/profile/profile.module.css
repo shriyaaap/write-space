@@ -1,7 +1,7 @@
 .profilePage {
   min-height: 100vh;
   background: #ffffff;
-  padding: 110px 20px 80px;
+  padding: 80px 20px 80px;
 }
 
 .profileContainer {
@@ -9,6 +9,8 @@
   max-width: 760px;
   margin: 0 auto;
 }
+
+/* Profile header */
 
 .profileHeader {
   display: flex;
@@ -22,6 +24,7 @@
   width: 110px;
   height: 110px;
   flex-shrink: 0;
+
   border-radius: 50%;
   overflow: hidden;
 
@@ -48,6 +51,7 @@
 
   font-family: Georgia, serif;
   font-size: 34px;
+
   color: #242424;
 }
 
@@ -58,25 +62,19 @@
 }
 
 .email {
-  margin: 0 0 10px;
+  margin: 0;
   color: #6b6b6b;
   font-size: 14px;
 }
 
-.bio {
-  margin: 0;
-  max-width: 500px;
-
-  color: #555;
-  font-size: 15px;
-  line-height: 1.5;
-}
+/* Followers / Following */
 
 .stats {
   display: flex;
   gap: 40px;
 
   padding: 24px 0;
+
   border-bottom: 1px solid #e6e6e6;
 }
 
@@ -96,9 +94,7 @@
   font-size: 13px;
 }
 
-.settings {
-  margin-top: 40px;
-}
+/* Settings */
 
 .section {
   padding: 32px 0;
@@ -110,6 +106,7 @@
 
   font-family: Georgia, serif;
   font-size: 24px;
+
   color: #242424;
 }
 
@@ -131,8 +128,7 @@
   font-weight: 500;
 }
 
-.field input,
-.field textarea {
+.field input {
   width: 100%;
   box-sizing: border-box;
 
@@ -148,15 +144,11 @@
   outline: none;
 }
 
-.field textarea {
-  resize: vertical;
-  line-height: 1.5;
-}
-
-.field input:focus,
-.field textarea:focus {
+.field input:focus {
   border-color: #242424;
 }
+
+/* Buttons */
 
 .saveButton {
   align-self: flex-start;
@@ -170,6 +162,7 @@
   color: white;
 
   font-size: 14px;
+
   cursor: pointer;
 }
 
@@ -182,6 +175,8 @@
   cursor: not-allowed;
 }
 
+/* Messages */
+
 .error {
   margin: 0;
   color: #c0392b;
@@ -193,6 +188,8 @@
   color: #2e7d32;
   font-size: 14px;
 }
+
+/* Mobile */
 
 @media (max-width: 600px) {
   .profilePage {

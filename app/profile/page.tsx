@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
@@ -34,6 +35,7 @@ export default async function ProfilePage() {
     <main className={styles.profilePage}>
       <div className={styles.profileContainer}>
 
+        {/* Profile information */}
         <header className={styles.profileHeader}>
           <div className={styles.avatar}>
             {user.avatar ? (
@@ -58,15 +60,10 @@ export default async function ProfilePage() {
             <p className={styles.email}>
               {user.email}
             </p>
-
-            {user.bio && (
-              <p className={styles.bio}>
-                {user.bio}
-              </p>
-            )}
           </div>
         </header>
 
+        {/* Followers / Following */}
         <div className={styles.stats}>
           <div className={styles.stat}>
             <strong>{user._count.followers}</strong>
@@ -79,10 +76,11 @@ export default async function ProfilePage() {
           </div>
         </div>
 
+        {/* Settings */}
         <ProfileForm
           username={user.username}
           name={user.name}
-          bio={user.bio}
+          email={user.email}
         />
 
       </div>

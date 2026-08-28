@@ -23,20 +23,34 @@ const profileSchema = z.object({
     .trim()
     .min(1, "Name is required")
     .max(50, "Name must be less than 50 characters"),
+
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address"),
 });
 
 const passwordSchema = z
   .object({
-    currentPassword: z.string().min(1, "Current password is required"),
+    currentPassword: z
+      .string()
+      .min(1, "Current password is required"),
+
     newPassword: z
       .string()
       .min(8, "New password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+
+    confirmPassword: z
+      .string()
+      .min(1, "Please confirm your password"),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+  .refine(
+    (data) => data.newPassword === data.confirmPassword,
+    {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    }
+  );
 
 type ActionState = {
   error?: string;
@@ -54,20 +68,28 @@ export async function updateProfile(
   }
 
   const result = profileSchema.safeParse({
-    username: formData.get("username")?.toString() ?? "",
-    name: formData.get("name")?.toString() ?? "",
-    bio: formData.get("bio")?.toString() ?? "",
+    username:
+      formData.get("username")?.toString() ?? "",
+
+    name:
+      formData.get("name")?.toString() ?? "",
+
+    email:
+      formData.get("email")?.toString() ?? "",
   });
 
   if (!result.success) {
     return {
-      error: result.error.issues[0]?.message ?? "Invalid profile details",
+      error:
+        result.error.issues[0]?.message ??
+        "Invalid profile details",
     };
   }
 
-  const { username, name } = result.data;
+  const { username, name, email } = result.data;
 
-  const existingUser = await prisma.user.findFirst({
+  // Check if another user already has this username
+  const existingUsername = await prisma.user.findFirst({
     where: {
       username,
       NOT: {
@@ -76,9 +98,25 @@ export async function updateProfile(
     },
   });
 
-  if (existingUser) {
+  if (existingUsername) {
     return {
       error: "That username is already taken.",
+    };
+  }
+
+  // Check if another user already has this email
+  const existingEmail = await prisma.user.findFirst({
+    where: {
+      email,
+      NOT: {
+        id: userId,
+      },
+    },
+  });
+
+  if (existingEmail) {
+    return {
+      error: "That email is already in use.",
     };
   }
 
@@ -89,6 +127,7 @@ export async function updateProfile(
     data: {
       username,
       name,
+      email,
     },
   });
 
@@ -123,7 +162,9 @@ export async function changePassword(
 
   if (!result.success) {
     return {
-      error: result.error.issues[0]?.message ?? "Invalid password",
+      error:
+        result.error.issues[0]?.message ??
+        "Invalid password",
     };
   }
 
@@ -152,7 +193,10 @@ export async function changePassword(
     };
   }
 
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const hashedPassword = await bcrypt.hash(
+    newPassword,
+    10
+  );
 
   await prisma.user.update({
     where: {

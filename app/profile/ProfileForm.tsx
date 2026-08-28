@@ -10,7 +10,7 @@ import styles from "./profile.module.css";
 type Props = {
   username: string;
   name: string;
-  bio: string | null;
+  email: string;
 };
 
 type ActionState = {
@@ -23,12 +23,25 @@ const initialState: ActionState = null;
 export default function ProfileForm({
   username,
   name,
+  email,
 }: Props) {
-  const [profileState, profileAction, profilePending] =
-    useActionState(updateProfile, initialState);
+  const [
+    profileState,
+    profileAction,
+    profilePending,
+  ] = useActionState(
+    updateProfile,
+    initialState
+  );
 
-  const [passwordState, passwordAction, passwordPending] =
-    useActionState(changePassword, initialState);
+  const [
+    passwordState,
+    passwordAction,
+    passwordPending,
+  ] = useActionState(
+    changePassword,
+    initialState
+  );
 
   return (
     <div className={styles.settings}>
@@ -41,6 +54,7 @@ export default function ProfileForm({
           action={profileAction}
           className={styles.form}
         >
+          {/* Name */}
           <div className={styles.field}>
             <label htmlFor="name">
               Name
@@ -55,6 +69,7 @@ export default function ProfileForm({
             />
           </div>
 
+          {/* Username */}
           <div className={styles.field}>
             <label htmlFor="username">
               Username
@@ -65,6 +80,21 @@ export default function ProfileForm({
               name="username"
               type="text"
               defaultValue={username}
+              required
+            />
+          </div>
+
+          {/* Email */}
+          <div className={styles.field}>
+            <label htmlFor="email">
+              Email
+            </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              defaultValue={email}
               required
             />
           </div>
@@ -93,7 +123,7 @@ export default function ProfileForm({
         </form>
       </section>
 
-      {/* Password */}
+      {/* Change password */}
       <section className={styles.section}>
         <h2>Change password</h2>
 
