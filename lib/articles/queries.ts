@@ -66,26 +66,10 @@ export async function searchPublishedArticles(query: string) {
   return prisma.article.findMany({
     where: {
       status: "PUBLISHED",
-      OR: [
-        {
-          title: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-        {
-          content: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-      ],
+      title: {
+        contains: search,
+        mode: "insensitive",
+      },
     },
     orderBy: {
       publishedAt: "desc",
