@@ -82,6 +82,33 @@ function SearchIcon() {
   );
 }
 
+function ProfileIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="12"
+        cy="8"
+        r="3.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+
+      <path
+        d="M5 20c.8-3.6 3.2-5.5 7-5.5s6.2 1.9 7 5.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function DashboardIcon() {
   return (
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
@@ -205,6 +232,18 @@ export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
           <SearchIcon />
           <span>Explore</span>
         </Link>
+
+        <div className="sidebar-bottom">
+          <Link
+            href="/profile"
+            className={`sidebar-link ${
+              pathname === "/profile" ? "active" : ""
+            }`}
+          >
+            <ProfileIcon/>
+            <span>Profile</span>
+          </Link>
+        </div>
       </nav>
     </aside>
   );
