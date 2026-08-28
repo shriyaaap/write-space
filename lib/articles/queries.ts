@@ -116,7 +116,6 @@ export async function getAuthorByUsername(username: string) {
   return prisma.user.findUnique({
     where: {
       username,
-      mode: "insensitive",
     },
     include: {
       articles: {
