@@ -174,10 +174,15 @@ function WriteIcon() {
 
 type SidebarProps = {
   userId?: string | null;
+  username?: string | null;
   isOpen?: boolean;
 };
 
-export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
+export default function Sidebar({
+  userId,
+  username,
+  isOpen = true,
+}: SidebarProps) {
   const pathname = usePathname();
 
   // If user is not logged in or sidebar toggle is closed, don't render anything
@@ -186,9 +191,29 @@ export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
   }
 
   return (
-    <aside className="sidebar">
+  <aside className="sidebar">
+    <div className="sidebar-inner">
+
+      <Link href="/" className="sidebar-logo">
+        WriteSpace
+      </Link>
+
+      <Link
+        href="/write"
+        className="write-story-button"
+      >
+        <WriteIcon />
+        <span>Write Story</span>
+      </Link>
+
       <nav className="sidebar-nav">
-        <Link href="/" className={`sidebar-link ${pathname === "/" ? "active" : ""}`}>
+
+        <Link
+          href="/"
+          className={`sidebar-link ${
+            pathname === "/" ? "active" : ""
+          }`}
+        >
           <HomeIcon />
           <span>Home</span>
         </Link>
@@ -214,16 +239,6 @@ export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
         </Link>
 
         <Link
-          href="/write"
-          className={`sidebar-link ${
-            pathname === "/write" ? "active" : ""
-          }`}
-        >
-          <WriteIcon />
-          <span>Write</span>
-        </Link>
-
-        <Link
           href="/search"
           className={`sidebar-link ${
             pathname === "/search" ? "active" : ""
@@ -233,18 +248,23 @@ export default function Sidebar({ userId, isOpen = true }: SidebarProps) {
           <span>Explore</span>
         </Link>
 
-        <div className="sidebar-bottom">
-          <Link
-            href="/profile"
-            className={`sidebar-link ${
-              pathname === "/profile" ? "active" : ""
-            }`}
-          >
-            <ProfileIcon/>
-            <span>Profile</span>
-          </Link>
-        </div>
       </nav>
-    </aside>
-  );
+
+      <div className="sidebar-bottom">
+
+        <Link
+          href={username ? `/${username}` : "/"}
+          className={`sidebar-link ${
+            username && pathname === `/${username}` ? "active" : ""
+          }`}
+        >
+          <ProfileIcon />
+          <span>Profile</span>
+        </Link>
+
+      </div>
+
+    </div>
+  </aside>
+);
 }

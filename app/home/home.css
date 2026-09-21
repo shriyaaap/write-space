@@ -1,6 +1,23 @@
 .home-page {
   min-height: 100vh;
-  background: #ffffff;
+
+  margin-left: 240px;
+  padding-top: 72px;
+
+  background: #f8f8f6;
+}
+
+.home-content {
+  width: min(100%, 1010px);
+
+  margin: 0 auto;
+
+  padding: 28px 24px 80px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 625px) 340px;
+  gap: 40px;
+  align-items: start;
 }
 
 .feed {

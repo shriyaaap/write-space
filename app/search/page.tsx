@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+
 import {
   searchPublishedArticles,
   searchUsers,
@@ -7,7 +8,6 @@ import {
 import ArticleCard from "@/components/articles/ArticleCard";
 import SearchInput from "@/components/SearchInput/SearchInput";
 
-import "../home/home.css";
 import "./search.css";
 
 type SearchPageProps = {
@@ -21,7 +21,7 @@ export default async function SearchPage({
 }: SearchPageProps) {
   const { q } = await searchParams;
 
-  const query = q ?? "";
+  const query = q?.trim() ?? "";
 
   const [articles, users] = query
     ? await Promise.all([
@@ -31,62 +31,90 @@ export default async function SearchPage({
     : [[], []];
 
   return (
-    <main className="home-page">
-      <section className="feed">
+    <main className="explore-page">
+      <section className="explore-container">
 
-        <div className="feed-header">
-          <h1>Search</h1>
+        <header className="explore-header">
+          <p className="explore-eyebrow">
+            CURATION & DISCOVERY
+          </p>
 
-          <div className="search-form">
-            <SearchInput />
-          </div>
+          <h1>Explore WriteSpace</h1>
+
+          <p className="explore-description">
+            Discover writers and articles across WriteSpace.
+          </p>
+        </header>
+
+        <div className="explore-search">
+          <SearchInput />
         </div>
 
         {query && (
-          <p>
-            Search results for &quot;{query}&quot;
-          </p>
+          <div className="search-query">
+            Search results for <span>&quot;{query}&quot;</span>
+          </div>
         )}
 
-        {/* USERS */}
-        {users.length > 0 && (
-          <section className="search-users">
-            <h2>People</h2>
+        {!query && (
+          <div className="explore-intro">
+            <h2>Discover something new</h2>
+            <p>
+              Search for writers, articles, topics, and ideas
+              that interest you.
+            </p>
+          </div>
+        )}
 
-            <div className="user-results">
+        {users.length > 0 && (
+          <section className="explore-section">
+            <div className="section-heading">
+              <h2>People</h2>
+              <span>{users.length} results</span>
+            </div>
+
+            <div className="people-results">
               {users.map((user) => (
                 <a
                   key={user.id}
                   href={`/${user.username}`}
-                  className="user-result"
+                  className="person-card"
                 >
-                  <div className="user-avatar">
+                  <div className="person-avatar">
                     {user.avatar ? (
                       <img
                         src={user.avatar}
                         alt={user.username}
                       />
                     ) : (
-                      user.username.charAt(0).toUpperCase()
+                      user.username
+                        .charAt(0)
+                        .toUpperCase()
                     )}
                   </div>
 
-                  <div className="user-info">
-                    <strong>{user.name}</strong>
-                    <span>@{user.username}</span>
+                  <div className="person-info">
+                    <h3>{user.name}</h3>
+                    <p>@{user.username}</p>
                   </div>
+
+                  <span className="person-arrow">
+                    →
+                  </span>
                 </a>
               ))}
             </div>
           </section>
         )}
 
-        {/* ARTICLES */}
         {articles.length > 0 && (
-          <section className="search-articles">
-            <h2>Articles</h2>
+          <section className="explore-section">
+            <div className="section-heading">
+              <h2>Articles</h2>
+              <span>{articles.length} results</span>
+            </div>
 
-            <div className="article-list">
+            <div className="explore-articles">
               {articles.map((article) => (
                 <ArticleCard
                   key={article.id}
@@ -97,18 +125,20 @@ export default async function SearchPage({
           </section>
         )}
 
-        {/* NO RESULTS */}
         {query &&
           users.length === 0 &&
           articles.length === 0 && (
-            <p>No results found.</p>
-          )}
+            <div className="explore-empty">
+              <div className="empty-icon">⌕</div>
 
-        {!query && (
-          <p className="pt-2">
-            Search for an article or user to get started.
-          </p>
-        )}
+              <h2>No results found</h2>
+
+              <p>
+                Try searching for a different writer,
+                article, or topic.
+              </p>
+            </div>
+          )}
 
       </section>
     </main>

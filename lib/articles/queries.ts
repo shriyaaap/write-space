@@ -112,11 +112,35 @@ export async function getFollowingArticles(userId: string) {
   });
 }
 
+export async function getFollowingAuthors(userId: string) {
+  const follows = await prisma.follow.findMany({
+    where: {
+      followerId: userId,
+    },
+    select: {
+      following: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          avatar: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return follows.map((follow) => follow.following);
+}
+
 export async function getAuthorByUsername(username: string) {
   return prisma.user.findUnique({
     where: {
       username,
     },
+
     include: {
       articles: {
         where: {
@@ -128,6 +152,14 @@ export async function getAuthorByUsername(username: string) {
         include: {
           author: true,
           tags: true,
+        },
+      },
+
+      _count: {
+        select: {
+          articles: true,
+          followers: true,
+          following: true,
         },
       },
     },
