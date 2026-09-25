@@ -1,8 +1,10 @@
 import "dotenv/config";
+import { randomBytes } from "crypto";
 
 import { getDevToArticles } from "../lib/devto/list";
 import { getDevToArticle } from "../lib/devto/client";
 import { prisma } from "../lib/db/prisma";
+import { hashPassword } from "../lib/auth/password";
 
 async function main() {
   console.log(
@@ -61,7 +63,9 @@ async function main() {
             username: devArticle.user.username,
             name: devArticle.user.name,
             email: `${devArticle.user.user_id}@devto.import`,
-            password: "devto-import",
+            password: await hashPassword(
+              randomBytes(32).toString("hex")
+            ),
             bio: null,
             avatar: devArticle.user.profile_image,
           },

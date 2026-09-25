@@ -55,6 +55,7 @@ export default function SignupPage() {
               type="password"
               name="password"
               minLength={8}
+              maxLength={72}
               required
             />
           </label>

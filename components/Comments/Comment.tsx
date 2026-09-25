@@ -135,7 +135,8 @@ export default function Comments({
                 )}
               </time>
 
-              {currentUserId === articleAuthorId && (
+              {(currentUserId === comment.author.id ||
+                currentUserId === articleAuthorId) && (
                 <button
                   type="button"
                   onClick={() => handleDelete(comment.id)}

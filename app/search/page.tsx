@@ -9,26 +9,39 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import SearchInput from "@/components/SearchInput/SearchInput";
 
 import "./search.css";
+import Link from "next/link";
 
 type SearchPageProps = {
   searchParams: Promise<{
     q?: string;
+    page?: string;
   }>;
 };
 
 export default async function SearchPage({
   searchParams,
 }: SearchPageProps) {
-  const { q } = await searchParams;
+  const params = await searchParams;
 
-  const query = q?.trim() ?? "";
+  const query = params.q?.trim() ?? "";
 
-  const [articles, users] = query
+  const requestedPage = Number(params.page) || 1;
+  const page = Math.min(Math.max(requestedPage, 1), 3);
+
+ 
+  const [searchResults, users] = query
     ? await Promise.all([
-        searchPublishedArticles(query),
+        searchPublishedArticles(query, page),
         searchUsers(query),
       ])
-    : [[], []];
+    : [{ articles: [], total: 0 }, []];
+
+  const { articles, total } = searchResults;
+
+  const pageSize = 10;
+  const totalPages = Math.ceil(total / pageSize);
+
+
 
   return (
     <main className="explore-page">
@@ -52,13 +65,15 @@ export default async function SearchPage({
 
         {query && (
           <div className="search-query">
-            Search results for <span>&quot;{query}&quot;</span>
+            Search results for{" "}
+            <span>&quot;{query}&quot;</span>
           </div>
         )}
 
         {!query && (
           <div className="explore-intro">
             <h2>Discover something new</h2>
+
             <p>
               Search for writers, articles, topics, and ideas
               that interest you.
@@ -75,7 +90,7 @@ export default async function SearchPage({
 
             <div className="people-results">
               {users.map((user) => (
-                <a
+                <Link
                   key={user.id}
                   href={`/${user.username}`}
                   className="person-card"
@@ -101,7 +116,7 @@ export default async function SearchPage({
                   <span className="person-arrow">
                     →
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           </section>
@@ -122,6 +137,30 @@ export default async function SearchPage({
                 />
               ))}
             </div>
+
+            {query && (
+              <div className="pagination">
+              {page > 1 && (
+                <Link
+                  href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
+                >
+                  ← Previous
+                </Link>
+              )}
+
+              <span>
+                Page {page} of {totalPages}
+              </span>
+
+              {page < totalPages && (
+                <Link
+                  href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
+                >
+                  Next →
+                </Link>
+              )}
+            </div>
+            )}
           </section>
         )}
 
@@ -144,3 +183,4 @@ export default async function SearchPage({
     </main>
   );
 }
+

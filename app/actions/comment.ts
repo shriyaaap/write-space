@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { getSessionUserId } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
+import {z} from "zod"
 
 export async function createComment(
   articleId: string,
@@ -14,6 +15,20 @@ export async function createComment(
     return {
       success: false,
       error: "You must be logged in to comment.",
+    };
+  }
+
+  const article = await prisma.article.findFirst({
+    where: {
+      id: articleId,
+      status: "PUBLISHED",
+    },
+  });
+
+  if (!article) {
+    return {
+      success: false,
+      error: "Article not found.",
     };
   }
 
@@ -40,7 +55,14 @@ export async function createComment(
       authorId: userId,
     },
     include: {
-      author: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          avatar: true,
+        },
+      },
     },
   });
 
@@ -51,15 +73,26 @@ export async function createComment(
 }
 
 export async function deleteComment(commentId: string) {
+  const idResult = z.string().cuid().safeParse(commentId);
+
+  if (!idResult.success) {
+    return {
+      success: false,
+      error: "Invalid comment ID.",
+    };
+  }
+
   const userId = await getSessionUserId();
 
   if (!userId) {
     redirect("/login");
   }
 
+  const validCommentId = idResult.data;
+
   const comment = await prisma.comment.findUnique({
     where: {
-      id: commentId,
+      id: validCommentId,
     },
     include: {
       article: true,
@@ -73,7 +106,10 @@ export async function deleteComment(commentId: string) {
     };
   }
 
-  if (comment.article.authorId !== userId) {
+  if (
+    comment.authorId !== userId &&
+    comment.article.authorId !== userId
+  ) {
     return {
       success: false,
       error: "You are not allowed to delete this comment.",
@@ -82,7 +118,7 @@ export async function deleteComment(commentId: string) {
 
   await prisma.comment.delete({
     where: {
-      id: commentId,
+      id: validCommentId,
     },
   });
 

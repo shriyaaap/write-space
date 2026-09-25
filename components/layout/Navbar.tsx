@@ -99,7 +99,7 @@ export default function Navbar({
                 </p>
 
                 <Link
-                  href={`/profile/${username}`}
+                  href={`${username}`}
                   className={styles.dropdownLink}
                   onClick={() => setProfileOpen(false)}
                 >
@@ -107,7 +107,7 @@ export default function Navbar({
                 </Link>
 
                 <Link
-                  href="/settings"
+                  href="/editprofile"
                   className={styles.dropdownLink}
                   onClick={() => setProfileOpen(false)}
                 >

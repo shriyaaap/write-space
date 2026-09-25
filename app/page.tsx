@@ -158,15 +158,13 @@ export default async function Home({
                 Writers in Your Feed
               </h2>
 
-              {articles
-                .slice(0, 3)
-                .map((article) => (
-                  <Writer
-                    key={article.author.id}
-                    name={article.author.name}
-                    description={`@${article.author.username}`}
-                  />
-                ))}
+              {articles.slice(0, 3).map((article) => (
+                <Writer
+                  key={article.id}
+                  name={article.author.name}
+                  description={`@${article.author.username}`}
+                />
+              ))}
             </section>
 
             {/* About WriteSpace */}

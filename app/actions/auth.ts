@@ -4,33 +4,82 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db/prisma";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { createSession, deleteSession } from "@/lib/auth/session";
+import { z } from "zod";
+
+const signupSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Name is required.")
+    .max(100, "Name must be 100 characters or less."),
+
+  username: z
+    .string()
+    .trim()
+    .regex(
+      /^[a-zA-Z0-9_]{3,30}$/,
+      "Username must be 3 to 30 characters and contain only letters, numbers, and underscores."
+    ),
+
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address.")
+    .max(255, "Email is too long."),
+
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(72, "Password must be 72 characters or less."),
+});
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address.")
+    .max(255, "Email is too long."),
+
+  password: z
+    .string()
+    .min(1, "Password is required.")
+    .max(72, "Password is too long."),
+});
 
 export async function signup(
   prevState: { error: string },
   formData: FormData
 ) {
-  const name = formData.get("name")?.toString().trim();
-  const username = formData.get("username")?.toString().trim();
-  const email = formData.get("email")?.toString().trim().toLowerCase();
-  const password = formData.get("password")?.toString();
+  const name = formData.get("name")?.toString() ?? "";
+  const username = formData.get("username")?.toString() ?? "";
+  const email = formData.get("email")?.toString() ?? "";
+  const password = formData.get("password")?.toString() ?? "";
 
-  if (!name || !username || !email || !password) {
+  const result = signupSchema.safeParse({
+    name,
+    username,
+    email,
+    password,
+  });
+
+  if (!result.success) {
     return {
-      error: "All fields are required.",
+      error: result.error.issues[0].message,
     };
   }
 
-  if (password.length < 8) {
-    return {
-      error: "Password must be at least 8 characters.",
-    };
-  }
+  const {
+    name: validName,
+    username: validUsername,
+    email: validEmail,
+    password: validPassword,
+  } = result.data;
 
   const existingUser = await prisma.user.findFirst({
     where: {
       OR: [
-        { email },
-        { username },
+        { email: validEmail.toLowerCase() },
+        { username: validUsername },
       ],
     },
   });
@@ -41,13 +90,13 @@ export async function signup(
     };
   }
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await hashPassword(validPassword);
 
   const user = await prisma.user.create({
     data: {
-      name,
-      username,
-      email,
+      name: validName,
+      username: validUsername,
+      email: validEmail.toLowerCase(),
       password: hashedPassword,
     },
   });
@@ -61,18 +110,25 @@ export async function login(
   prevState: { error: string },
   formData: FormData
 ) {
-  const email = formData.get("email")?.toString().trim().toLowerCase();
-  const password = formData.get("password")?.toString();
+  const email = formData.get("email")?.toString() ?? "";
+  const password = formData.get("password")?.toString() ?? "";
 
-  if (!email || !password) {
+  const result = loginSchema.safeParse({
+    email,
+    password,
+  });
+
+  if (!result.success) {
     return {
-      error: "Email and password are required.",
+      error: result.error.issues[0].message,
     };
   }
 
+  const { email: validEmail, password: validPassword } = result.data;
+
   const user = await prisma.user.findUnique({
     where: {
-      email,
+      email: validEmail.toLowerCase(),
     },
   });
 
@@ -83,7 +139,7 @@ export async function login(
   }
 
   const passwordValid = await verifyPassword(
-    password,
+    validPassword,
     user.password
   );
 

@@ -9,18 +9,21 @@ const articleSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(1, "Title is required"),
+    .min(1, "Title is required")
+    .max(200, "Title must be 200 characters or less"),
 
   description: z
     .string()
     .trim()
+    .max(500, "Description must be 500 characters or less")
     .optional()
     .or(z.literal("")),
 
   content: z
     .string()
     .trim()
-    .min(1, "Content is required"),
+    .min(1, "Content is required")
+    .max(100_000, "Content must be 100,000 characters or less"),
 });
 
 type ActionState = {
@@ -382,18 +385,30 @@ export async function deleteArticle(formData: FormData) {
   const articleId = formData.get("articleId")?.toString();
 
   if (!articleId) {
-    return;
+    return {
+      error: "Article ID is missing.",
+    };
+  }
+
+  const idResult = z.string().cuid().safeParse(articleId);
+
+  if (!idResult.success) {
+    return {
+      error: "Invalid article ID.",
+    };
   }
 
   const article = await prisma.article.findFirst({
     where: {
-      id: articleId,
+      id: idResult.data,
       authorId: userId,
     },
   });
 
   if (!article) {
-    return;
+    return {
+      error: "Article not found.",
+    };
   }
 
   await prisma.article.delete({
@@ -405,17 +420,15 @@ export async function deleteArticle(formData: FormData) {
   redirect("/dashboard");
 }
 
-
 /* -----------------------------
    Record Article View
 ----------------------------- */
 
 export async function recordArticleView(articleId: string) {
-  console.log("Recording view for:", articleId);
-
-  const article = await prisma.article.update({
+  const result = await prisma.article.updateMany({
     where: {
       id: articleId,
+      status: "PUBLISHED",
     },
     data: {
       views: {
@@ -424,8 +437,19 @@ export async function recordArticleView(articleId: string) {
     },
   });
 
-  console.log("New view count:", article.views);
+  if (result.count === 0) {
+    return null;
+  }
 
-  return article.views;
+  const article = await prisma.article.findUnique({
+    where: {
+      id: articleId,
+    },
+    select: {
+      views: true,
+    },
+  });
+
+  return article?.views ?? null;
 }
 

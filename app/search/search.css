@@ -216,6 +216,22 @@
   font-size: 15px;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 40px;
+  color: #686963;
+  font-size: 14px;
+}
+
+.pagination a {
+  color: #172bb8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 /* Tablet */
 
 @media (max-width: 900px) {

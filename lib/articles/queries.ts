@@ -1,5 +1,12 @@
 import { prisma } from "../db/prisma";
 
+const publicAuthorSelect = {
+  id: true,
+  name: true,
+  username: true,
+  avatar: true,
+};
+
 export async function getPublishedArticles(
   page = 1,
   pageSize = 10
@@ -14,7 +21,9 @@ export async function getPublishedArticles(
     skip: (page - 1) * pageSize,
     take: pageSize,
     include: {
-      author: true,
+      author: {
+        select: publicAuthorSelect,
+      },
       tags: true,
     },
   });
@@ -27,12 +36,16 @@ export async function getPublishedArticleBySlug(slug: string) {
       status: "PUBLISHED",
     },
     include: {
-      author: true,
+      author: {
+        select: publicAuthorSelect,
+      },
       tags: true,
       claps: true,
       comments: {
         include: {
-          author: true,
+          author: {
+            select: publicAuthorSelect,
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -56,39 +69,67 @@ export async function isFollowingUser(
   });
 }
 
-export async function searchPublishedArticles(query: string) {
+
+export async function searchPublishedArticles(
+  query: string,
+  page: number = 1
+) {
   const search = query.trim();
 
   if (!search) {
-    return [];
+    return {
+      articles: [],
+      total: 0,
+    };
   }
 
-  const articles = await prisma.article.findMany({
-    where: {
-      status: "PUBLISHED",
-      title: {
-        contains: search,
-        mode: "insensitive",
+  const pageSize = 10;
+  const safePage = Math.max(page, 1);
+
+  const where = {
+    status: "PUBLISHED" as const,
+    title: {
+      contains: search,
+      mode: "insensitive" as const,
+    },
+  };
+
+  const [articles, total] = await Promise.all([
+    prisma.article.findMany({
+      where,
+      orderBy: {
+        publishedAt: "desc",
       },
-    },
-    orderBy: {
-      publishedAt: "desc",
-    },
-    include: {
-      author: true,
-      tags: true,
-    },
-  });
+      skip: (safePage - 1) * pageSize,
+      take: pageSize,
+      include: {
+        author: {
+          select: publicAuthorSelect,
+        },
+        tags: true,
+      },
+    }),
+
+    prisma.article.count({
+      where,
+    }),
+  ]);
 
   console.log(
     "SEARCH:",
     search,
+    "PAGE:",
+    safePage,
     "RESULT TITLES:",
     articles.map((article) => article.title)
   );
 
-  return articles;
+  return {
+    articles,
+    total,
+  };
 }
+
 
 export async function getFollowingArticles(userId: string) {
   return prisma.article.findMany({
@@ -105,8 +146,11 @@ export async function getFollowingArticles(userId: string) {
     orderBy: {
       publishedAt: "desc",
     },
+    take: 10,
     include: {
-      author: true,
+      author: {
+        select: publicAuthorSelect,
+      },
       tags: true,
     },
   });
@@ -150,7 +194,9 @@ export async function getAuthorByUsername(username: string) {
           publishedAt: "desc",
         },
         include: {
-          author: true,
+          author: {
+            select: publicAuthorSelect,
+          },
           tags: true,
         },
       },
@@ -179,8 +225,11 @@ export async function getArticlesByTag(tag: string) {
     orderBy: {
       publishedAt: "desc",
     },
+    take: 20,
     include: {
-      author: true,
+      author: {
+        select: publicAuthorSelect,
+      },
       tags: true,
     },
   });
