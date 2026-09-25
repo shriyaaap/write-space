@@ -9,7 +9,10 @@ if (!secret) {
 
 const secretKey = new TextEncoder().encode(secret);
 
-const COOKIE_NAME = "write-space-session";
+const COOKIE_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Host-write-space-session"
+    : "write-space-session";
 
 export async function createSession(userId: string) {
   const token = await new SignJWT({
@@ -19,7 +22,7 @@ export async function createSession(userId: string) {
       alg: "HS256",
     })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime("1d")
     .sign(secretKey);
 
   const cookieStore = await cookies();
@@ -29,7 +32,7 @@ export async function createSession(userId: string) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24,
   });
 }
 
