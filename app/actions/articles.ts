@@ -385,17 +385,13 @@ export async function deleteArticle(formData: FormData) {
   const articleId = formData.get("articleId")?.toString();
 
   if (!articleId) {
-    return {
-      error: "Article ID is missing.",
-    };
+    throw new Error("Article ID is missing.");
   }
 
   const idResult = z.string().cuid().safeParse(articleId);
 
   if (!idResult.success) {
-    return {
-      error: "Invalid article ID.",
-    };
+    throw new Error("Invalid article ID.");
   }
 
   const article = await prisma.article.findFirst({
@@ -406,9 +402,7 @@ export async function deleteArticle(formData: FormData) {
   });
 
   if (!article) {
-    return {
-      error: "Article not found.",
-    };
+    throw new Error("Article not found.");
   }
 
   await prisma.article.delete({
@@ -419,7 +413,6 @@ export async function deleteArticle(formData: FormData) {
 
   redirect("/dashboard");
 }
-
 /* -----------------------------
    Record Article View
 ----------------------------- */
