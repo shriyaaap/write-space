@@ -9,7 +9,10 @@ if (!secret) {
 
 const secretKey = new TextEncoder().encode(secret);
 
-const COOKIE_NAME = "write-space-session";
+const COOKIE_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Host-write-space-session"
+    : "write-space-session";
 
 const protectedRoutes = [
   "/dashboard",
